@@ -7,21 +7,14 @@ import java.util.ResourceBundle;
 import data.FigureView;
 import data.MoveCalculator;
 import data.NumberBoard;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 public class BoardController implements Initializable {
 
 	@FXML
 	GridPane board;
-	
-	// yolo
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -31,7 +24,7 @@ public class BoardController implements Initializable {
 		nb.populateGridPane(board);
 		System.out.println("CHILDREN: " + board.getChildren().size());
 
-		FigureView testtest = new FigureView(5);
+		FigureView testtest = new FigureView(4);
 		board.add(testtest, 2, 5);
 
 		System.out.println("CHILDREN: " + board.getChildren().size());

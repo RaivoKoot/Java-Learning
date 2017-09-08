@@ -78,10 +78,14 @@ public class MoveCalculator {
 
 				for (int k = 0; extend || k == 0; k++) {
 					if (k != 0) {
-						if (newLocation > pieceLocation)
-							newLocation++;
-						else {
-							newLocation--;
+						if (newLocation / 10 != pieceLocation / 10) {
+							newLocation -= moveDirections[i];
+						} else {
+							if (newLocation > pieceLocation)
+								newLocation++;
+							else {
+								newLocation--;
+							}
 						}
 					}
 
