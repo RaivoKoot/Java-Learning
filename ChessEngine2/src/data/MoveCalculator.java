@@ -19,7 +19,6 @@ public class MoveCalculator {
 
 	private static final int[][] allMoves = { ROOK_MOVES, BISHOP_MOVES, KNIGHT_MOVES, QUEEN_MOVES, KING_MOVES };
 
-	
 	public ArrayList<Integer> generatePawnMoves(int pieceLocation, int[] numberBoard) {
 		ArrayList<Integer> possibleMoves = new ArrayList<Integer>();
 
@@ -36,7 +35,7 @@ public class MoveCalculator {
 				newLocation = pieceLocation + movesArray[i];
 
 				if (isLegalMove(numberBoard[newLocation], type)) {
-					if (i < 2 || numberBoard[newLocation] != 0)
+					if ((i < 2 && numberBoard[newLocation] == 0) || (i > 1 && numberBoard[newLocation] != 0))
 						possibleMoves.add(newLocation);
 				}
 			}

@@ -7,14 +7,21 @@ import java.util.ResourceBundle;
 import data.FigureView;
 import data.MoveCalculator;
 import data.NumberBoard;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 public class BoardController implements Initializable {
 
 	@FXML
 	GridPane board;
+	
+	// yolo
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -22,17 +29,17 @@ public class BoardController implements Initializable {
 		MoveCalculator mc = new MoveCalculator();
 
 		nb.populateGridPane(board);
-		//System.out.println("CHILDREN: " + board.getChildren().size());
+		System.out.println("CHILDREN: " + board.getChildren().size());
 
-		FigureView testtest = new FigureView(-2);
-		board.add(testtest, 2, 3);
+		FigureView testtest = new FigureView(5);
+		board.add(testtest, 2, 5);
 
-		//System.out.println("CHILDREN: " + board.getChildren().size());
+		System.out.println("CHILDREN: " + board.getChildren().size());
 
 		int[] numberBoard = nb.gridpaneToNumberboard(board);
 		System.out.print(nb.getString(numberBoard));
 
-		ArrayList<Integer> possibleMoves = mc.generatePossibleMoves(21, numberBoard);
+		ArrayList<Integer> possibleMoves = mc.generatePossibleMoves(52, numberBoard);
 
 		for (int temp : possibleMoves)
 			System.out.println(temp);
@@ -41,8 +48,7 @@ public class BoardController implements Initializable {
 
 }
 
-////////////////////////////// Check if pawn move generation works if pawn is in middle of field
-//////////////////////////////
+////////////////////////////// IMPORTANT: Queen moves are not properly generated
 
 ////////////////////////////// Note: make sure to clean the getChildren list of
 ////////////////////////////// the GridPane gameboard when moving or adding

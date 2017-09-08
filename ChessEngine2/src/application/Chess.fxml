@@ -12,7 +12,12 @@
    <center>
       <AnchorPane style="-fx-background-color: brown;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="600.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="75.0">
+            <ImageView fitHeight="750.0" fitWidth="750.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/Capture.PNG" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="600.0" fitWidth="600.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="75.0">
                <image>
                   <Image url="@../icons/tile_background.png" />
                </image>

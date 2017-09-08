@@ -53,8 +53,7 @@ public class NumberBoard {
 			col = -1;
 			row = -1;
 		}
-
-		System.out.println(arrayBoard[99]);
+		
 		return arrayBoard;
 	}
 
