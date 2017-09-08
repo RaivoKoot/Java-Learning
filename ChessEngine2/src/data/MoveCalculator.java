@@ -1,6 +1,7 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javafx.scene.layout.GridPane;
 
@@ -52,12 +53,10 @@ public class MoveCalculator {
 		int type = numberBoard[pieceLocation];
 
 		if (type == 1 || type == -1)
-			return generatePawnMoves(pieceLocation, numberBoard);
+			possibleMoves = generatePawnMoves(pieceLocation, numberBoard);
 		else {
 
 			int movesIndex = Math.abs(type) - 2;
-
-			int newMoveLocation = -1;
 
 			int[] moveDirections = null;
 			try {
@@ -100,9 +99,10 @@ public class MoveCalculator {
 
 				}
 			}
-
-			return possibleMoves;
 		}
+
+		Collections.sort(possibleMoves);
+		return possibleMoves;
 	}
 
 	// checks if target location is either vacant or taken by opponent piece

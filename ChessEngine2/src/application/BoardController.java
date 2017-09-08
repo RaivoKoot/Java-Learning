@@ -2,6 +2,7 @@ package application;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
 import data.FigureView;
@@ -24,7 +25,7 @@ public class BoardController implements Initializable {
 		nb.populateGridPane(board);
 		System.out.println("CHILDREN: " + board.getChildren().size());
 
-		FigureView testtest = new FigureView(4);
+		FigureView testtest = new FigureView(-5);
 		board.add(testtest, 2, 5);
 
 		System.out.println("CHILDREN: " + board.getChildren().size());
