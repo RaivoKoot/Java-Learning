@@ -1,9 +1,15 @@
-package data;
+package logic;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+/* Each object of this class has the purpose of
+ * representing a piece in the chess game.
+ * In a different class, the objects are put into a GridPane
+ * 
+ * Each object consists of a type and a coordinate on the chess board
+ */
 public class FigureView extends ImageView {
 
 	private final String[] IMAGE_NAMES = { "b_pawn.png", "b_rook.png", "b_bishop.png", "b_knight.png", "b_queen.png",
@@ -61,7 +67,7 @@ public class FigureView extends ImageView {
 		int row = GridPane.getRowIndex(this);
 		int column = GridPane.getColumnIndex(this);
 		int[] coordinate = { column, row };
-		
+
 		return coordinate;
 	}
 

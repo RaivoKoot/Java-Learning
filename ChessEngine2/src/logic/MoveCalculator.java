@@ -1,12 +1,18 @@
-package data;
+package logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import javafx.scene.layout.GridPane;
 
+/* This class has the purpose to generate 
+ * the current legal moves
+ * of chess pieces on the board. 
+ *  
+ * It needs the numberBoard as a paramter
+ */
 public class MoveCalculator {
-	NumberBoard nb = new NumberBoard();
+	NumberBoardManipulator nb = new NumberBoardManipulator();
 
 	// move directions of chess pieces from their current position
 	private static final int[] ROOK_MOVES = { 1, 1, -1, 10, -10 };
