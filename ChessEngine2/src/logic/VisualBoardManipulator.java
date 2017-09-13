@@ -1,6 +1,5 @@
 package logic;
 
-import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 
 public class VisualBoardManipulator {
@@ -20,7 +19,7 @@ public class VisualBoardManipulator {
 
 		}
 	}
-	
+
 	// translates a location from a numberBoard into a coordinate on a GridPane
 	public int[] numberToCoordinate(int number) {
 		int[] coordinate = new int[2];
