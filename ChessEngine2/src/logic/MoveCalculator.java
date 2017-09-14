@@ -12,7 +12,6 @@ import javafx.scene.layout.GridPane;
  * It needs the numberBoard as a paramter
  */
 public class MoveCalculator {
-	NumberBoardManipulator nb = new NumberBoardManipulator();
 
 	// move directions of chess pieces from their current position
 	private static final int[] ROOK_MOVES = { 1, 1, -1, 10, -10 };
@@ -94,7 +93,7 @@ public class MoveCalculator {
 						}
 					}
 
-					if (newLocation >= 0 && isLegalMove(numberBoard[newLocation], type)) {
+					if (newLocation >= 0 && newLocation < 100 && isLegalMove(numberBoard[newLocation], type)) {
 						possibleMoves.add(newLocation);
 						// if enemy in the way, extension over
 						if (numberBoard[newLocation] != 0)

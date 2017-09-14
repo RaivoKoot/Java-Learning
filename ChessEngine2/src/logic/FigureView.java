@@ -73,5 +73,16 @@ public class FigureView extends ImageView {
 
 		return coordinate;
 	}
+	
+	public int getArraylocation(int[] coordinate) {
+		coordinate = getCoordinate();
+		
+		int number = 0;
+
+		number += coordinate[0];
+		number += 10 * coordinate[1];
+
+		return number;
+	}
 
 }
