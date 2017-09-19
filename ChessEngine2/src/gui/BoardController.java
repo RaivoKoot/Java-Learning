@@ -17,32 +17,20 @@ import logic.NumberBoardManipulator;
 public class BoardController implements Initializable {
 
 	Logic logic;
-	
+
 	@FXML
 	GridPane visualBoard;
-	@FXML 
-	GridPane backgroundBoard;
+	@FXML
+	GridPane moveHighlighter;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//initializeBackgroundBoard(backgroundBoard);
+		// initializeBackgroundBoard(backgroundBoard);
 
-		logic = new Logic(visualBoard);
+		logic = new Logic(visualBoard, moveHighlighter);
 
 	}
-/*
-	private void initializeBackgroundBoard(GridPane backgroundBoard) {
-		for (int i = 0; i < 10; i++)
-			for (int k = 0; k < 10; k++) {
-				Region rg = new Region();
-				rg.setStyle("-fx-background-color: lightgreen");
-				rg.setOpacity(0.7);
-				backgroundBoard.add(rg, k, i);
-			}
-	}
-*/
 }
-
 
 ////////////////////////////// Note: make sure to clean the getChildren list of
 ////////////////////////////// the GridPane gameboard when moving or adding

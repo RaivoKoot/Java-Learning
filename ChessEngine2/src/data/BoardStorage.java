@@ -1,19 +1,30 @@
 package data;
 
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 
 public class BoardStorage {
 
 	private int[] numberBoard;
 	private GridPane visualBoard;
+	private GridPane moveHighlighter;
 
-	public BoardStorage(GridPane visualBoard) {
+	public BoardStorage(GridPane visualBoard, GridPane moveHighlighter) {
 		setNumberBoard(new int[] { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 2, 4, 3, 5, 6, 3, 4, 2, 100,
 				100, 1, 1, 1, 1, 1, 1, 1, 1, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 100,
 				100, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, -1, -1, -1, -1, -1, -1, -1, -1,
 				100, 100, -2, -4, -3, -5, -6, -3, -4, -2, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 });
 
 		this.setVisualBoard(visualBoard);
+		
+		this.setMoveHighlighter(moveHighlighter);
+		for (int i = 0; i < 10; i++)
+			for (int k = 0; k < 10; k++) {
+				Region rg = new Region();
+				rg.setStyle("-fx-background-color: lightgreen");
+				rg.setOpacity(0.0);
+				moveHighlighter.add(rg, k, i);
+			}
 	}
 
 	public GridPane getVisualBoard() {
@@ -57,6 +68,14 @@ public class BoardStorage {
 
 		return board_representation;
 
+	}
+
+	public GridPane getMoveHighlighter() {
+		return moveHighlighter;
+	}
+
+	public void setMoveHighlighter(GridPane moveHighlighter) {
+		this.moveHighlighter = moveHighlighter;
 	}
 
 	/*

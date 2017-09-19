@@ -22,7 +22,7 @@
                   <Image url="@../icons/tile_background.png" />
                </image>
             </ImageView>
-            <GridPane fx:id="backgroundBoard" prefHeight="750.0" prefWidth="750.0">
+            <GridPane fx:id="moveHighlighter" prefHeight="750.0" prefWidth="750.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

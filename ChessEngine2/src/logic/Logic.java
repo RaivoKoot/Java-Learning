@@ -9,30 +9,29 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
+import turnManagement.TurnManager;
 
 public class Logic {
 
 	private BoardStorage data;
+	private TurnManager turnManager;
 
 	private MoveCalculator mc = new MoveCalculator();
 	private NumberBoardManipulator nbm = new NumberBoardManipulator();
 	private VisualBoardManipulator vbm = new VisualBoardManipulator();
 
-	public Logic(GridPane visualBoard) {
-		data = new BoardStorage(visualBoard);
+	/*
+	 * constructor
+	 */
+	public Logic(GridPane visualBoard, GridPane moveHighlighter) {
+		data = new BoardStorage(visualBoard, moveHighlighter);
 
 		vbm.populateGridPane(visualBoard, data.getNumberBoard());
 
 		setupDragAndDrop(visualBoard);
 
-		/*
-		 * Node test = visualBoard.getChildren().get(25);
-		 * visualBoard.getChildren().remove(test);
-		 * 
-		 * visualBoard.add(test, 5, 3);
-		 * System.out.println("Col: "+GridPane.getColumnIndex(test));
-		 * System.out.println("Row: "+GridPane.getRowIndex(test));
-		 */
+		turnManager = new TurnManager();
 	}
 
 	/*
@@ -41,9 +40,7 @@ public class Logic {
 
 	FigureView sourcePiece;
 	ArrayList<Integer> availableMoves;
-
-	int[] destinationLocation;
-	int originLocation;
+	ArrayList<Region> highlightedFields;
 
 	public void setupDragAndDrop(GridPane visualBoard) {
 		ObservableList<Node> children = visualBoard.getChildren();
@@ -55,28 +52,32 @@ public class Logic {
 	}
 
 	public void makeNodeDraggable(Node node) {
-		setupDragDetection(node);
+		GridPane moveHighlightingPane = data.getMoveHighlighter();
+		setupDragDetection(node, moveHighlightingPane);
 		setupDragOver(node);
 		setupDragDropped(node);
+		setupDragDone(node, moveHighlightingPane);
 	}
 
-	public void setupDragDetection(Node node) {
+	public void setupDragDetection(Node node, GridPane moveHighlightingPane) {
 		node.setOnDragDetected(event -> {
 
 			FigureView originPiece = (FigureView) event.getSource();
 
-			if (originPiece.getType() == 0 || originPiece.getType() == 100)
+			System.out.println(turnManager.isPlayersTurn());
+			if (originPiece.getType() > -1)
 				event.consume();
-			else {
+			else if (turnManager.isPlayersTurn()) {
 
 				sourcePiece = originPiece;
 
-				int[] sourceCoordinate = originPiece.getCoordinate();
-				originLocation = originPiece.getArraylocation(sourceCoordinate);
-				
-				System.out.println("Source:"+originLocation);
+				int originLocation = originPiece.getArraylocation();
+
+				System.out.println("Source:" + originLocation);
 
 				availableMoves = mc.generatePossibleMoves(originLocation, data.getNumberBoard());
+
+				vbm.highlightFields(availableMoves, moveHighlightingPane);
 
 				Dragboard db = originPiece.startDragAndDrop(TransferMode.MOVE);
 
@@ -86,7 +87,7 @@ public class Logic {
 
 				db.setContent(content);
 			}
-			
+
 			System.out.println("drag detected");
 
 		});
@@ -96,39 +97,55 @@ public class Logic {
 		node.setOnDragDropped(event -> {
 			FigureView destinationNode = (FigureView) event.getSource();
 
-			int[] destinationCoordinate = destinationNode.getCoordinate();
-
-			int destinationArrayLocation = destinationNode.getArraylocation(destinationCoordinate);
-
-			System.out.println(destinationArrayLocation);
-
 			System.out.println("Droppevent");
 
-			if (!availableMoves.contains(destinationArrayLocation))
+			int dropLocation = destinationNode.getArraylocation();
+
+			if (!availableMoves.contains(dropLocation))
 				event.consume();
 
 			else {
-				GridPane visualBoard = data.getVisualBoard();
 
-				// remove origin and destination node
-				visualBoard.getChildren().remove(destinationNode);
-				visualBoard.getChildren().remove(sourcePiece);
+				executeAMove(sourcePiece, destinationNode, data.getNumberBoard(), data.getVisualBoard());
 
-				// create new empty field to put at origin location
-				FigureView newOriginField = new FigureView(0);
-				makeNodeDraggable(newOriginField);
-				
-				// put the empty field at the location of the dragged node and the dragged node on the destination field
-				visualBoard.add(newOriginField, GridPane.getColumnIndex(sourcePiece), GridPane.getRowIndex(sourcePiece));
-				visualBoard.add(sourcePiece, destinationCoordinate[0], destinationCoordinate[1]);
-				
-				// update the number board of the move
-				int[] numberBoard = data.getNumberBoard();
-				nbm.makeMove(originLocation, destinationArrayLocation, numberBoard);
-		
-				
+				// signal that players turn is finished
+				turnManager.setPlayersTurn(false);
+
+				// make AI move
+				makeAIMove(data.getNumberBoard(), data.getVisualBoard());
 			}
 		});
+	}
+
+	public void makeAIMove(int[] numberBoard, GridPane visualBoard) {
+		int[] moveInfo = turnManager.miniMax(data.getNumberBoard());
+
+		FigureView movingNode = vbm.getANode(moveInfo[0], visualBoard);
+		FigureView destinationNode = vbm.getANode(moveInfo[1], visualBoard);
+
+		executeAMove(movingNode, destinationNode, numberBoard, visualBoard);
+
+		turnManager.setPlayersTurn(true);
+
+	}
+
+	public void executeAMove(FigureView movingNode, FigureView destinationNode, int[] numberBoard,
+			GridPane visualBoard) {
+		// save the dragged pieces location before it is moved
+		int originLocation = movingNode.getArraylocation();
+
+		// pass on move information for execution
+		Node fieldMovedFrom = vbm.makeMove(movingNode, destinationNode, visualBoard);
+
+		// make the new empty origin field go through the drag and drop setup
+		makeNodeDraggable(fieldMovedFrom);
+
+		// get the destination of the drag and drop
+		int dropLocation = destinationNode.getArraylocation();
+
+		// synchronize the numberBoard with the new move
+		nbm.makeMove(originLocation, dropLocation, data.getNumberBoard());
+
 	}
 
 	public void setupDragOver(Node node) {
@@ -136,6 +153,13 @@ public class Logic {
 			event.acceptTransferModes(TransferMode.ANY);
 			event.consume();
 			System.out.println("Drag over");
+		});
+	}
+
+	public void setupDragDone(Node node, GridPane moveHighlighter) {
+		node.setOnDragDone(event -> {
+			System.out.println("DRAG FINISHED");
+			vbm.removeHighlights(availableMoves, moveHighlighter);
 		});
 	}
 }

@@ -34,7 +34,7 @@ public class FigureView extends ImageView {
 	// Sets the image the user sees
 	public void changeImage(int imageIndex) {
 		String fullImageLink = imageLinkRoot + IMAGE_NAMES[imageIndex];
-		if(imageIndex == 12){
+		if (imageIndex == 12) {
 			this.setOpacity(0.01);
 		}
 
@@ -73,10 +73,10 @@ public class FigureView extends ImageView {
 
 		return coordinate;
 	}
-	
-	public int getArraylocation(int[] coordinate) {
-		coordinate = getCoordinate();
-		
+
+	public int getArraylocation() {
+		int[] coordinate = getCoordinate();
+
 		int number = 0;
 
 		number += coordinate[0];
