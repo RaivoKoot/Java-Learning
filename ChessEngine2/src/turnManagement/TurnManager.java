@@ -1,19 +1,30 @@
 package turnManagement;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import logic.ChessMove;
 import logic.MoveCalculator;
+import logic.NumberBoardManipulator;
 
 public class TurnManager {
 
 	private MoveCalculator mc;
+	private NumberBoardManipulator nbm;
 
 	private boolean playersTurn;
+
+	// b pawn, b rook, b bishop, b knight, b queen, b king, w pawn, w rook, w
+	// bishop, w knight, w queen, w king
+	private final static int[] HEURISTIC_PIECE_VALUES = { 100, 500, 330, 320, 900, 20000, -100, -500, -330, -320, -900,
+			-20000 };
 
 	public TurnManager() {
 		setPlayersTurn(true);
 		mc = new MoveCalculator();
+		nbm = new NumberBoardManipulator();
+
 	}
 
 	public void playerTurnMade() {
@@ -28,94 +39,146 @@ public class TurnManager {
 		this.playersTurn = playersTurn;
 	}
 
-	public int[] miniMax(boolean aiTurn, int[] numberBoard, ArrayList<Integer> aiPieceLocations,
+	public int evaluateBoardByPieces(int[] numberBoard, ArrayList<Integer> aiPieceLocations,
 			ArrayList<Integer> userPieceLocations) {
-		int[] moveInformation = new int[2];
-
-		ArrayList<ArrayList<Integer>> allPossibleMoves = new ArrayList<ArrayList<Integer>>();
-
-		ArrayList<Integer> currentPieceLocations;
-
-		// set white or black pieces to be checked
-		if (aiTurn)
-			currentPieceLocations = aiPieceLocations;
-		else
-			currentPieceLocations = userPieceLocations;
-
-
-		for (int temp : currentPieceLocations)
-			System.out.println(temp+", ");
-		
-		// A List of all the pieces where the pieces that can not move at this
-		// points will be removed
-		ArrayList<Integer> movablePieces = new ArrayList<Integer>(currentPieceLocations);
-
-		// add the lists of pieces' moves to the allPossibleMoves list if the
-		// piece has at least one available move
-
+		int score = 0;
 		try {
-			for (int i = 0; i < movablePieces.size(); i++) {
+			List[] allPieces = { aiPieceLocations, userPieceLocations };
 
-				ArrayList<Integer> possibleMovesForPiece = mc.generatePossibleMoves(movablePieces.get(i), numberBoard);
+			int type = 100;
+			for (int i = 0; i < 2; i++)
+				for (int k = 0; k < allPieces[i].size(); k++) {
+					type = numberBoard[(int) allPieces[i].get(k)];
 
+					if (type < 0) {
+						type *= -1;
+						type += 5;
+					} else
+						type--;
 
-				if (possibleMovesForPiece.size() != 0)
-					allPossibleMoves.add(possibleMovesForPiece);
-				else {
-					movablePieces.remove(i);
-					i--;
+					score += HEURISTIC_PIECE_VALUES[type];
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return score;
+	}
+
+	public ChessMove miniMax(boolean aiTurn, int[] numberBoard, ArrayList<Integer> aiPieceLocations,
+			ArrayList<Integer> userPieceLocations, int depth, ChessMove aMove) {
+
+		ChessMove bestMove = null;
+
+		if (depth == 4) {
+			int heuristicValue = evaluateBoardByPieces(numberBoard, aiPieceLocations, userPieceLocations);
+			aMove.setHeuristicValue(heuristicValue);
+			return aMove;
+		} else {
+
+			/*
+			 * determines whether black or white pieces will be used for this iteration of minimax
+			 * post: currentPieceLocations is set to either ai's or user's pieces
+			 */
+			ArrayList<Integer> currentPieceLocations;
+			if (aiTurn)
+				currentPieceLocations = aiPieceLocations;
+			else
+				currentPieceLocations = userPieceLocations;
+
+			/*
+			 * generates all possible moves 
+			 * post: allPossibleMoves is filled with moves that include their heuristic value
+			 */
+			ArrayList<ChessMove> allPossibleMoves = new ArrayList<ChessMove>();
+			try {
+				for (int i = 0; i < currentPieceLocations.size(); i++) {
+
+					int originLocation = currentPieceLocations.get(i);
+
+					ArrayList<Integer> possibleMovesForPiece = mc.generatePossibleMoves(originLocation, numberBoard);
+
+					/*
+					 * call miniMax on each move to ultimately get its heuristic value
+					 */
+					for (int k = 0; k < possibleMovesForPiece.size(); k++) {
+						// miniMax
+						ChessMove newMove = new ChessMove(originLocation, possibleMovesForPiece.get(k));
+
+						int[] numberBoardCopy = numberBoard.clone();
+						nbm.makeMove(newMove, numberBoardCopy);
+
+						ArrayList<Integer> aiPieceLocationsCopy = (ArrayList<Integer>) aiPieceLocations.clone();
+						ArrayList<Integer> userPieceLocationsCopy = (ArrayList<Integer>) userPieceLocations.clone();
+						if (aiTurn)
+							nbm.updatePieceLocations(aiPieceLocationsCopy, userPieceLocationsCopy,
+									newMove.getStartingLocation(), newMove.getDestinationLocation());
+						else
+							nbm.updatePieceLocations(userPieceLocationsCopy, aiPieceLocationsCopy,
+									newMove.getStartingLocation(), newMove.getDestinationLocation());
+
+						newMove = miniMax(!aiTurn, numberBoardCopy, aiPieceLocationsCopy, userPieceLocationsCopy,
+								depth + 1, newMove);
+						allPossibleMoves.add(newMove);
+					}
 				}
 
+				bestMove = allPossibleMoves.get(0);
+				/*
+				 * choses the move with the best heuristic value
+				 * post: bestMove is set to the move with the highest value
+				 */
+				for (ChessMove move : allPossibleMoves) {
+					if (aiTurn) {
+						if (move.getHeuristicValue() > bestMove.getHeuristicValue())
+							bestMove = move;
+					} else if (!aiTurn)
+						if (move.getHeuristicValue() < bestMove.getHeuristicValue())
+							bestMove = move;
+
+				}
+
+				/*
+				 * if the bestMove has the same value as before the move, then all moves have the same value.
+				 * Therefore, chose a random move
+				 * post: bestMove is set to a random move
+				 *
+				
+				if (bestMove.getHeuristicValue() == evaluateBoardByPieces(numberBoard, aiPieceLocations,
+						userPieceLocations)) {
+					Random rand = new Random();
+					int randomNumber = -1;
+				
+					randomNumber = rand.nextInt(allPossibleMoves.size());
+					bestMove = allPossibleMoves.get(randomNumber);
+				}
+				*/
+				
+				if (depth != 0) {
+					aMove.setHeuristicValue(bestMove.getHeuristicValue());
+					bestMove = aMove;
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			return bestMove;
 		}
-
-		Random rand = new Random();
-		int randomPiece = -1;
-		int randomMove = -1;
-
-		try {
-
-			randomPiece = rand.nextInt(movablePieces.size());
-			randomMove = rand.nextInt(allPossibleMoves.get(randomPiece).size());
-			System.out.println("Size of List" + allPossibleMoves.get(randomPiece).size());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		try {
-			System.out.println("Piece List Element index: " + randomPiece);
-			System.out.println("Piece location: " + movablePieces.get(randomPiece));
-			System.out.println("Piece type: " + numberBoard[movablePieces.get(randomPiece)]);
-			System.out.println("Random Move List Element index: " + randomMove);
-			System.out.println("RandomMove: " + allPossibleMoves.get(randomPiece).get(randomMove));
-
-			moveInformation = new int[] { movablePieces.get(randomPiece),
-					allPossibleMoves.get(randomPiece).get(randomMove) };
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return moveInformation;
 	}
 
 	/*
-	 * make it save piece locations
+	 * [check] make it save piece locations [check]
 	 * 
-	 * 1. make the minimax algorithm work for both black and white
+	 * [check] 1. make the minimax algorithm work for both black and white
 	 * 
-	 * 2. Create an evaluation function that only counts the points you have by
-	 * pieces
+	 * [check] 2. Create an evaluation function that only counts the points you have
+	 * by pieces
 	 * 
-	 * 3. integrate the evaluation function so that the algorithm changes from
+	 * [] 3. integrate the evaluation function so that the algorithm changes from
 	 * making random moves to which move will give it the most points. make the
 	 * difference between the pieces as good as possible
 	 * 
-	 * 4. change the algorithm so that it searches at a depth of 2, so that the
-	 * ai does not make a move wherafter it's moved piece will be killed unless
-	 * the exchange is favorable
+	 * 4. change the algorithm so that it searches at a depth of 2, so that the ai
+	 * does not make a move wherafter it's moved piece will be killed unless the
+	 * exchange is favorable
 	 */
 }

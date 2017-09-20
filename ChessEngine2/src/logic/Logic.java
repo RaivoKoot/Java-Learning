@@ -72,8 +72,6 @@ public class Logic {
 
 				int originLocation = originPiece.getArraylocation();
 
-				System.out.println("Source:" + originLocation);
-
 				availableMoves = mc.generatePossibleMoves(originLocation, data.getNumberBoard());
 
 				vbm.highlightFields(availableMoves, moveHighlightingPane);
@@ -105,16 +103,11 @@ public class Logic {
 
 			else {
 
-				System.out.println("Check 1");
 				executeAMove(sourcePiece, destinationNode, data.getNumberBoard(), data.getVisualBoard());
-
-				System.out.println("Check 2");
 
 				// signal that players turn is finished
 				turnManager.setPlayersTurn(false);
 
-				System.out.println("Check 3");
-				
 				// make AI move
 				makeAIMove(data.getNumberBoard(), data.getVisualBoard());
 
@@ -123,11 +116,11 @@ public class Logic {
 	}
 
 	public void makeAIMove(int[] numberBoard, GridPane visualBoard) {
-		int[] moveInfo = turnManager.miniMax(true, data.getNumberBoard(), data.getAiPieceLocations(),
-				data.getUserPieceLocations());
+		ChessMove aiMove = turnManager.miniMax(true, data.getNumberBoard(), data.getAiPieceLocations(),
+				data.getUserPieceLocations(), 0, null);
 
-		FigureView movingNode = vbm.getANode(moveInfo[0], visualBoard);
-		FigureView destinationNode = vbm.getANode(moveInfo[1], visualBoard);
+		FigureView movingNode = vbm.getANode(aiMove.getStartingLocation(), visualBoard);
+		FigureView destinationNode = vbm.getANode(aiMove.getDestinationLocation(), visualBoard);
 
 		executeAMove(movingNode, destinationNode, numberBoard, visualBoard);
 
@@ -153,17 +146,12 @@ public class Logic {
 		// synchronize the numberBoard with the new move
 		nbm.makeMove(originLocation, dropLocation, data.getNumberBoard());
 
-		System.out.println("Moved Node type: " + movingNode.getType());
-		System.out.println("Players Turn? " + turnManager.isPlayersTurn());
-
 		if (movingNode.getType() > 0) {
 			nbm.updatePieceLocations(data.getAiPieceLocations(), data.getUserPieceLocations(), originLocation,
 					dropLocation);
-			System.out.println("NB UPDATE 1");
 		} else {
 			nbm.updatePieceLocations(data.getUserPieceLocations(), data.getAiPieceLocations(), originLocation,
 					dropLocation);
-			System.out.println("NB UPDATE 2");
 		}
 
 	}

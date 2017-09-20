@@ -16,6 +16,11 @@ public class NumberBoardManipulator {
 		numberBoard[targetField] = numberBoard[originField];
 		numberBoard[originField] = 0;
 	}
+	
+	public void makeMove(ChessMove move, int[] numberBoard) {
+		numberBoard[move.getDestinationLocation()] = numberBoard[move.getStartingLocation()];
+		numberBoard[move.getStartingLocation()] = 0;
+	}
 
 	public void updatePieceLocations(ArrayList<Integer> pieceLocations, ArrayList<Integer> opponentPieceLocations,
 			int oldLocation, int newLocation) {
