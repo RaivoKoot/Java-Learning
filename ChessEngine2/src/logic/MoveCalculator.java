@@ -55,8 +55,14 @@ public class MoveCalculator {
 	public ArrayList<Integer> generatePossibleMoves(int pieceLocation, int[] numberBoard) {
 		ArrayList<Integer> possibleMoves = new ArrayList<Integer>();
 
+		
+		
 		int type = numberBoard[pieceLocation];
-
+		
+		if(type == 0 || type == 100){
+			System.out.println("ERROR. You have passed a bad location to the generateMoves function");
+			System.out.println("Piece Location: "+pieceLocation);
+		}
 		if (type == 1 || type == -1)
 			possibleMoves = generatePawnMoves(pieceLocation, numberBoard);
 		else {
@@ -66,7 +72,7 @@ public class MoveCalculator {
 			int[] moveDirections = null;
 			try {
 				moveDirections = allMoves[movesIndex];
-			} catch (ArrayIndexOutOfBoundsException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("You are trying to find moves for a vacant square");
 			}

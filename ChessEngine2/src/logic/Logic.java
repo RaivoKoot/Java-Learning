@@ -1,7 +1,6 @@
 package logic;
 
 import java.util.ArrayList;
-
 import data.BoardStorage;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -106,19 +105,26 @@ public class Logic {
 
 			else {
 
+				System.out.println("Check 1");
 				executeAMove(sourcePiece, destinationNode, data.getNumberBoard(), data.getVisualBoard());
+
+				System.out.println("Check 2");
 
 				// signal that players turn is finished
 				turnManager.setPlayersTurn(false);
 
+				System.out.println("Check 3");
+				
 				// make AI move
 				makeAIMove(data.getNumberBoard(), data.getVisualBoard());
+
 			}
 		});
 	}
 
 	public void makeAIMove(int[] numberBoard, GridPane visualBoard) {
-		int[] moveInfo = turnManager.miniMax(data.getNumberBoard());
+		int[] moveInfo = turnManager.miniMax(true, data.getNumberBoard(), data.getAiPieceLocations(),
+				data.getUserPieceLocations());
 
 		FigureView movingNode = vbm.getANode(moveInfo[0], visualBoard);
 		FigureView destinationNode = vbm.getANode(moveInfo[1], visualBoard);
@@ -131,6 +137,7 @@ public class Logic {
 
 	public void executeAMove(FigureView movingNode, FigureView destinationNode, int[] numberBoard,
 			GridPane visualBoard) {
+
 		// save the dragged pieces location before it is moved
 		int originLocation = movingNode.getArraylocation();
 
@@ -145,6 +152,19 @@ public class Logic {
 
 		// synchronize the numberBoard with the new move
 		nbm.makeMove(originLocation, dropLocation, data.getNumberBoard());
+
+		System.out.println("Moved Node type: " + movingNode.getType());
+		System.out.println("Players Turn? " + turnManager.isPlayersTurn());
+
+		if (movingNode.getType() > 0) {
+			nbm.updatePieceLocations(data.getAiPieceLocations(), data.getUserPieceLocations(), originLocation,
+					dropLocation);
+			System.out.println("NB UPDATE 1");
+		} else {
+			nbm.updatePieceLocations(data.getUserPieceLocations(), data.getAiPieceLocations(), originLocation,
+					dropLocation);
+			System.out.println("NB UPDATE 2");
+		}
 
 	}
 

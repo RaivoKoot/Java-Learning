@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.ArrayList;
+
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 
@@ -13,6 +15,19 @@ public class NumberBoardManipulator {
 	public void makeMove(int originField, int targetField, int[] numberBoard) {
 		numberBoard[targetField] = numberBoard[originField];
 		numberBoard[originField] = 0;
+	}
+
+	public void updatePieceLocations(ArrayList<Integer> pieceLocations, ArrayList<Integer> opponentPieceLocations,
+			int oldLocation, int newLocation) {
+		try {
+			pieceLocations.remove(Integer.valueOf(oldLocation));
+			pieceLocations.add(newLocation);
+
+			if (opponentPieceLocations.contains(newLocation))
+				opponentPieceLocations.remove(Integer.valueOf(newLocation));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// creates a copy of the GridPane Board as a numberBoard

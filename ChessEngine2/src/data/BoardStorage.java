@@ -1,5 +1,8 @@
 package data;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 
@@ -9,6 +12,11 @@ public class BoardStorage {
 	private GridPane visualBoard;
 	private GridPane moveHighlighter;
 
+	private ArrayList<Integer> aiPieceLocations = new ArrayList<Integer>(
+			Arrays.asList(11, 12, 13, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 26, 27, 28));
+	private ArrayList<Integer> userPieceLocations = new ArrayList<Integer>(
+			Arrays.asList(71, 72, 73, 74, 75, 76, 77, 78, 81, 82, 83, 84, 85, 86, 87, 88));
+
 	public BoardStorage(GridPane visualBoard, GridPane moveHighlighter) {
 		setNumberBoard(new int[] { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 2, 4, 3, 5, 6, 3, 4, 2, 100,
 				100, 1, 1, 1, 1, 1, 1, 1, 1, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 100,
@@ -16,7 +24,7 @@ public class BoardStorage {
 				100, 100, -2, -4, -3, -5, -6, -3, -4, -2, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 });
 
 		this.setVisualBoard(visualBoard);
-		
+
 		this.setMoveHighlighter(moveHighlighter);
 		for (int i = 0; i < 10; i++)
 			for (int k = 0; k < 10; k++) {
@@ -77,6 +85,15 @@ public class BoardStorage {
 	public void setMoveHighlighter(GridPane moveHighlighter) {
 		this.moveHighlighter = moveHighlighter;
 	}
+
+	public ArrayList<Integer> getUserPieceLocations() {
+		return userPieceLocations;
+	}
+
+	public ArrayList<Integer> getAiPieceLocations() {
+		return aiPieceLocations;
+	}
+
 
 	/*
 	 * @format:off
