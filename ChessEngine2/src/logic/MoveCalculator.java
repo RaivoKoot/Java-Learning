@@ -29,7 +29,7 @@ public class MoveCalculator {
 		ArrayList<Integer> possibleMoves = new ArrayList<Integer>();
 
 		int type = numberBoard[pieceLocation];
-		int newLocation = -1;
+		int newLocation = -1; // default
 
 		int[] movesArray = BLACK_PAWN_MOVES;
 		if (type == -1)
@@ -37,7 +37,7 @@ public class MoveCalculator {
 
 		for (int i = 0; i < movesArray.length; i++) {
 			// if i is 0 or the pawn is on its starting field
-			if (i != 1 || (((pieceLocation / 10) == 2) || ((pieceLocation / 10) == 7))) {
+			if (i != 1 || ((((pieceLocation / 10) == 2) || ((pieceLocation / 10) == 7))) && possibleMoves.size() != 0) {
 				newLocation = pieceLocation + movesArray[i];
 
 				if (isLegalMove(numberBoard[newLocation], type)) {
@@ -55,13 +55,11 @@ public class MoveCalculator {
 	public ArrayList<Integer> generatePossibleMoves(int pieceLocation, int[] numberBoard) {
 		ArrayList<Integer> possibleMoves = new ArrayList<Integer>();
 
-		
-		
 		int type = numberBoard[pieceLocation];
-		
-		if(type == 0 || type == 100){
+
+		if (type == 0 || type == 100) {
 			System.out.println("ERROR. You have passed a bad location to the generateMoves function");
-			System.out.println("Piece Location: "+pieceLocation);
+			System.out.println("Piece Location: " + pieceLocation);
 		}
 		if (type == 1 || type == -1)
 			possibleMoves = generatePawnMoves(pieceLocation, numberBoard);

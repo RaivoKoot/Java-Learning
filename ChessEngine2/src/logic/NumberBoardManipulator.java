@@ -15,11 +15,27 @@ public class NumberBoardManipulator {
 	public void makeMove(int originField, int targetField, int[] numberBoard) {
 		numberBoard[targetField] = numberBoard[originField];
 		numberBoard[originField] = 0;
+
+		checkForPromotion(new ChessMove(originField, targetField), numberBoard);
 	}
-	
+
 	public void makeMove(ChessMove move, int[] numberBoard) {
 		numberBoard[move.getDestinationLocation()] = numberBoard[move.getStartingLocation()];
 		numberBoard[move.getStartingLocation()] = 0;
+
+		checkForPromotion(move, numberBoard);
+	}
+
+	private void checkForPromotion(ChessMove move, int[] numberBoard) {
+		int type = numberBoard[move.getDestinationLocation()];
+		int newLocation = move.getDestinationLocation();
+
+		if ((type == -1 && newLocation / 10 == 1) || (type == 1 && newLocation / 10 == 8)) {
+			if (type == -1)
+				numberBoard[newLocation] = -5;
+			else
+				numberBoard[newLocation] = 5;
+		}
 	}
 
 	public void updatePieceLocations(ArrayList<Integer> pieceLocations, ArrayList<Integer> opponentPieceLocations,

@@ -33,7 +33,7 @@ public class VisualBoardManipulator {
 			if (GridPane.getColumnIndex(child) == coordinate[0] && GridPane.getRowIndex(child) == coordinate[1])
 				return (FigureView) child;
 		}
-		
+
 		return null;
 	}
 
@@ -52,7 +52,7 @@ public class VisualBoardManipulator {
 	/*
 	 * places a node of choice on a new location and vacates its old location
 	 */
-	public Node makeMove(FigureView sourcePiece, FigureView destinationPiece, GridPane visualBoard) {
+	public Node[] makeMove(FigureView sourcePiece, FigureView destinationPiece, GridPane visualBoard) {
 		// remove origin and destination node
 		visualBoard.getChildren().remove(destinationPiece);
 		visualBoard.getChildren().remove(sourcePiece);
@@ -60,21 +60,62 @@ public class VisualBoardManipulator {
 		// create new empty field to put at origin location
 		FigureView fieldLeftFrom = new FigureView(0);
 
-		// put the new empty field object at the location of the dragged node and the
+		// put the new empty field object at the location of the dragged node
+		// and the
 		// dragged node
 		// on the destination field
 		visualBoard.add(fieldLeftFrom, GridPane.getColumnIndex(sourcePiece), GridPane.getRowIndex(sourcePiece));
-		visualBoard.add(sourcePiece, GridPane.getColumnIndex(destinationPiece), GridPane.getRowIndex(destinationPiece));
 
-		// return the new child that now sits where the piece moved from to set it up
+		// promotes the piece if it is elligible
+		FigureView newQueen = checkForPromotion(sourcePiece, destinationPiece);
+
+		if (newQueen == null)
+			// puts the moved piece onto the new GridPane field
+			visualBoard.add(sourcePiece, GridPane.getColumnIndex(destinationPiece),
+					GridPane.getRowIndex(destinationPiece));
+		else
+			visualBoard.add(newQueen, GridPane.getColumnIndex(destinationPiece),
+					GridPane.getRowIndex(destinationPiece));
+		// return the new child that now sits where the piece moved from to set
+		// it up
 		// with drag and drop
-		return fieldLeftFrom;
+		Node[] newNodes;
+		if (newQueen == null) {
+			newNodes = new Node[] { fieldLeftFrom };
+		} else {
+			newNodes = new Node[] { fieldLeftFrom, newQueen };
+		}
+
+		return newNodes;
 	}
 
 	/*
 	 * following two methods are used to highlight the available moves of dragged
 	 * piece green
 	 */
+
+	private FigureView checkForPromotion(FigureView piece, FigureView destinationNode) {
+		/*
+		 * checks if a pawn qualifies for promotion
+		 * statement the moved piece has the type pawn and is moved onto the last row top or bottom
+		 */
+		int type = piece.getType();
+		int row = GridPane.getRowIndex(destinationNode);
+		FigureView newQueen = null;
+
+
+		if ((type == -1 && row == 1) || (type == 1 && row == 8)) {
+			/*
+			 * promotes the moved piece into a queen
+			 */
+			if (type == -1)
+				newQueen = new FigureView(-5);
+			else
+				newQueen = new FigureView(5);
+		}
+
+		return newQueen;
+	}
 
 	public void highlightFields(ArrayList<Integer> locations, GridPane moveHighlighter) {
 		ObservableList<Node> highlightFields = moveHighlighter.getChildren();

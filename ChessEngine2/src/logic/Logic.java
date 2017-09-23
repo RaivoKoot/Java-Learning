@@ -134,11 +134,17 @@ public class Logic {
 		// save the dragged pieces location before it is moved
 		int originLocation = movingNode.getArraylocation();
 
-		// pass on move information for execution
-		Node fieldMovedFrom = vbm.makeMove(movingNode, destinationNode, visualBoard);
+		// pass on move information for execution and return new nodes that need
+		// to be set up for drag and drop
+		Node[] fieldMovedFromAndNewQueen = vbm.makeMove(movingNode, destinationNode, visualBoard);
 
-		// make the new empty origin field go through the drag and drop setup
-		makeNodeDraggable(fieldMovedFrom);
+		/*
+		 * make the field that has been moved from, which is now empty drag and drop compatible
+		 * also do this for a new
+		 */
+		for (Node newNode : fieldMovedFromAndNewQueen) {
+			makeNodeDraggable(newNode);
+		}
 
 		// get the destination of the drag and drop
 		int dropLocation = destinationNode.getArraylocation();
@@ -167,6 +173,7 @@ public class Logic {
 	public void setupDragDone(Node node, GridPane moveHighlighter) {
 		node.setOnDragDone(event -> {
 			System.out.println("DRAG FINISHED");
+
 			vbm.removeHighlights(availableMoves, moveHighlighter);
 		});
 	}

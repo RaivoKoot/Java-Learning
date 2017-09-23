@@ -122,7 +122,11 @@ public class TurnManager {
 					}
 				}
 
-				bestMove = allPossibleMoves.get(0);
+				bestMove = new ChessMove(-1000, -1000);
+				if(aiTurn)
+					bestMove.setHeuristicValue(-9999999);
+				else
+					bestMove.setHeuristicValue(1000000);
 				/*
 				 * choses the move with the best heuristic value
 				 * post: bestMove is set to the move with the highest value
@@ -151,8 +155,9 @@ public class TurnManager {
 					randomNumber = rand.nextInt(allPossibleMoves.size());
 					bestMove = allPossibleMoves.get(randomNumber);
 				}
-				*/
 				
+				*/
+
 				if (depth != 0) {
 					aMove.setHeuristicValue(bestMove.getHeuristicValue());
 					bestMove = aMove;

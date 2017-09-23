@@ -14,15 +14,16 @@ public class BoardStorage {
 
 	private ArrayList<Integer> aiPieceLocations = new ArrayList<Integer>(
 			Arrays.asList(11, 12, 13, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 26, 27, 28));
-	private ArrayList<Integer> userPieceLocations = new ArrayList<Integer>(
+			
+			private ArrayList<Integer> userPieceLocations = new ArrayList<Integer>(
 			Arrays.asList(71, 72, 73, 74, 75, 76, 77, 78, 81, 82, 83, 84, 85, 86, 87, 88));
+
 
 	public BoardStorage(GridPane visualBoard, GridPane moveHighlighter) {
 		setNumberBoard(new int[] { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 2, 4, 3, 5, 6, 3, 4, 2, 100,
 				100, 1, 1, 1, 1, 1, 1, 1, 1, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 100,
 				100, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, -1, -1, -1, -1, -1, -1, -1, -1,
 				100, 100, -2, -4, -3, -5, -6, -3, -4, -2, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 });
-
 		this.setVisualBoard(visualBoard);
 
 		this.setMoveHighlighter(moveHighlighter);
