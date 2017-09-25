@@ -13,6 +13,10 @@ public class TurnManager {
 	private MoveCalculator mc;
 	private NumberBoardManipulator nbm;
 
+	private int callsToMinimax = 0;
+	
+	private int maximumCallsToMinimax = 0;
+
 	private boolean playersTurn;
 
 	// b pawn, b rook, b bishop, b knight, b queen, b king, w pawn, w rook, w
@@ -64,34 +68,71 @@ public class TurnManager {
 		return score;
 	}
 
+	private boolean isGameOver(int heuristicValue) {
+		if (Math.abs(heuristicValue) > 10000)
+			return true;
+		return false;
+	}
+
+	private void updatePieceLocations(boolean aiTurn, ArrayList<Integer> aiPieceLocations,
+			ArrayList<Integer> userPieceLocations, ChessMove move) {
+		if (aiTurn)
+			nbm.updatePieceLocations(aiPieceLocations, userPieceLocations, move.getStartingLocation(),
+					move.getDestinationLocation());
+		else
+			nbm.updatePieceLocations(userPieceLocations, aiPieceLocations, move.getStartingLocation(),
+					move.getDestinationLocation());
+	}
+
+	public int getCallsToMinimax() {
+		return callsToMinimax;
+	}
+
+	public void setCallsToMinimax(int callsToMinimax) {
+		this.callsToMinimax = callsToMinimax;
+	}
+
+	/*
+	 * Main Algorithm for AI player
+	 */
 	public ChessMove miniMax(boolean aiTurn, int[] numberBoard, ArrayList<Integer> aiPieceLocations,
-			ArrayList<Integer> userPieceLocations, int depth, ChessMove aMove) {
+			ArrayList<Integer> userPieceLocations, int depth, ChessMove aMove, int alpha, int beta) {
 
-		ChessMove bestMove = null;
+		callsToMinimax++;
+		int alphaCopy = alpha;
+		int betaCopy = beta;
 
-		if (depth == 4) {
-			int heuristicValue = evaluateBoardByPieces(numberBoard, aiPieceLocations, userPieceLocations);
+		/* if heuristic value is over 10000 it means one player has lost his king and the game is over */
+		int heuristicValue = evaluateBoardByPieces(numberBoard, aiPieceLocations, userPieceLocations);
+		boolean gameIsOver = isGameOver(heuristicValue);
+
+		// return the heuristic value of node and the move
+		if (depth == 5 || gameIsOver) {
 			aMove.setHeuristicValue(heuristicValue);
 			return aMove;
 		} else {
 
+			ChessMove bestMove = new ChessMove(-1, -1);
+			ArrayList<Integer> currentPieceLocations;
 			/*
 			 * determines whether black or white pieces will be used for this iteration of minimax
-			 * post: currentPieceLocations is set to either ai's or user's pieces
+			 * post: currentPieceLocations is set to either ai's or user's pieces, bestmove is initialized
 			 */
-			ArrayList<Integer> currentPieceLocations;
-			if (aiTurn)
+
+			if (aiTurn) {
+				bestMove.setHeuristicValue(-9999999);
 				currentPieceLocations = aiPieceLocations;
-			else
+			} else {
+				bestMove.setHeuristicValue(9999999);
 				currentPieceLocations = userPieceLocations;
+			}
 
 			/*
 			 * generates all possible moves 
 			 * post: allPossibleMoves is filled with moves that include their heuristic value
 			 */
-			ArrayList<ChessMove> allPossibleMoves = new ArrayList<ChessMove>();
 			try {
-				for (int i = 0; i < currentPieceLocations.size(); i++) {
+				root_loop: for (int i = 0; i < currentPieceLocations.size(); i++) {
 
 					int originLocation = currentPieceLocations.get(i);
 
@@ -101,62 +142,49 @@ public class TurnManager {
 					 * call miniMax on each move to ultimately get its heuristic value
 					 */
 					for (int k = 0; k < possibleMovesForPiece.size(); k++) {
-						// miniMax
+
 						ChessMove newMove = new ChessMove(originLocation, possibleMovesForPiece.get(k));
 
+						// creates a copy of the numberboad and updates it for
+						// the new move
 						int[] numberBoardCopy = numberBoard.clone();
 						nbm.makeMove(newMove, numberBoardCopy);
 
+						// creates copies of the piece location lists and
+						// updates them for the new move
 						ArrayList<Integer> aiPieceLocationsCopy = (ArrayList<Integer>) aiPieceLocations.clone();
 						ArrayList<Integer> userPieceLocationsCopy = (ArrayList<Integer>) userPieceLocations.clone();
-						if (aiTurn)
-							nbm.updatePieceLocations(aiPieceLocationsCopy, userPieceLocationsCopy,
-									newMove.getStartingLocation(), newMove.getDestinationLocation());
-						else
-							nbm.updatePieceLocations(userPieceLocationsCopy, aiPieceLocationsCopy,
-									newMove.getStartingLocation(), newMove.getDestinationLocation());
+						updatePieceLocations(aiTurn, aiPieceLocationsCopy, userPieceLocationsCopy, newMove);
 
+						// MINIMAX ON CHILD NODE
 						newMove = miniMax(!aiTurn, numberBoardCopy, aiPieceLocationsCopy, userPieceLocationsCopy,
-								depth + 1, newMove);
-						allPossibleMoves.add(newMove);
+								depth + 1, newMove, alphaCopy, betaCopy);
+
+						if (aiTurn) {
+							if (newMove.getHeuristicValue() > bestMove.getHeuristicValue()) {
+
+								bestMove = newMove;
+
+								if (newMove.getHeuristicValue() > alphaCopy)
+									alphaCopy = newMove.getHeuristicValue();
+
+								if (alphaCopy >= betaCopy)
+									break root_loop;
+
+							}
+						} else if (newMove.getHeuristicValue() < bestMove.getHeuristicValue()) {
+							bestMove = newMove;
+
+							if (newMove.getHeuristicValue() < betaCopy)
+								betaCopy = newMove.getHeuristicValue();
+
+							if (betaCopy <= alphaCopy)
+								break root_loop;
+
+						}
+
 					}
 				}
-
-				bestMove = new ChessMove(-1000, -1000);
-				if(aiTurn)
-					bestMove.setHeuristicValue(-9999999);
-				else
-					bestMove.setHeuristicValue(1000000);
-				/*
-				 * choses the move with the best heuristic value
-				 * post: bestMove is set to the move with the highest value
-				 */
-				for (ChessMove move : allPossibleMoves) {
-					if (aiTurn) {
-						if (move.getHeuristicValue() > bestMove.getHeuristicValue())
-							bestMove = move;
-					} else if (!aiTurn)
-						if (move.getHeuristicValue() < bestMove.getHeuristicValue())
-							bestMove = move;
-
-				}
-
-				/*
-				 * if the bestMove has the same value as before the move, then all moves have the same value.
-				 * Therefore, chose a random move
-				 * post: bestMove is set to a random move
-				 *
-				
-				if (bestMove.getHeuristicValue() == evaluateBoardByPieces(numberBoard, aiPieceLocations,
-						userPieceLocations)) {
-					Random rand = new Random();
-					int randomNumber = -1;
-				
-					randomNumber = rand.nextInt(allPossibleMoves.size());
-					bestMove = allPossibleMoves.get(randomNumber);
-				}
-				
-				*/
 
 				if (depth != 0) {
 					aMove.setHeuristicValue(bestMove.getHeuristicValue());
@@ -170,20 +198,11 @@ public class TurnManager {
 		}
 	}
 
-	/*
-	 * [check] make it save piece locations [check]
-	 * 
-	 * [check] 1. make the minimax algorithm work for both black and white
-	 * 
-	 * [check] 2. Create an evaluation function that only counts the points you have
-	 * by pieces
-	 * 
-	 * [] 3. integrate the evaluation function so that the algorithm changes from
-	 * making random moves to which move will give it the most points. make the
-	 * difference between the pieces as good as possible
-	 * 
-	 * 4. change the algorithm so that it searches at a depth of 2, so that the ai
-	 * does not make a move wherafter it's moved piece will be killed unless the
-	 * exchange is favorable
-	 */
+	public int getMaximumCallsToMinimax() {
+		return maximumCallsToMinimax;
+	}
+
+	public void setMaximumCallsToMinimax(int maximumCallsToMinimax) {
+		this.maximumCallsToMinimax = maximumCallsToMinimax;
+	}
 }

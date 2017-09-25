@@ -63,7 +63,6 @@ public class Logic {
 
 			FigureView originPiece = (FigureView) event.getSource();
 
-			System.out.println(turnManager.isPlayersTurn());
 			if (originPiece.getType() > -1)
 				event.consume();
 			else if (turnManager.isPlayersTurn()) {
@@ -85,16 +84,12 @@ public class Logic {
 				db.setContent(content);
 			}
 
-			System.out.println("drag detected");
-
 		});
 	}
 
 	public void setupDragDropped(Node node) {
 		node.setOnDragDropped(event -> {
 			FigureView destinationNode = (FigureView) event.getSource();
-
-			System.out.println("Droppevent");
 
 			int dropLocation = destinationNode.getArraylocation();
 
@@ -109,15 +104,21 @@ public class Logic {
 				turnManager.setPlayersTurn(false);
 
 				// make AI move
-				makeAIMove(data.getNumberBoard(), data.getVisualBoard());
-
+				makeAIMove(true, data.getNumberBoard(), data.getVisualBoard());
+				System.out.println("Calls to Minimax Function:" + turnManager.getCallsToMinimax());
+				if (turnManager.getCallsToMinimax() > turnManager.getMaximumCallsToMinimax())
+					turnManager.setMaximumCallsToMinimax(turnManager.getCallsToMinimax());
+				turnManager.setCallsToMinimax(0);
+				System.out
+						.println("\nmaximum calls to minimax: " + turnManager.getMaximumCallsToMinimax() / 1000 + "k");
 			}
 		});
 	}
 
-	public void makeAIMove(int[] numberBoard, GridPane visualBoard) {
-		ChessMove aiMove = turnManager.miniMax(true, data.getNumberBoard(), data.getAiPieceLocations(),
-				data.getUserPieceLocations(), 0, null);
+	public void makeAIMove(boolean makeBlackTurn, int[] numberBoard, GridPane visualBoard) {
+
+		ChessMove aiMove = turnManager.miniMax(makeBlackTurn, data.getNumberBoard(), data.getAiPieceLocations(),
+				data.getUserPieceLocations(), 0, null, -9999999, 9999999);
 
 		FigureView movingNode = vbm.getANode(aiMove.getStartingLocation(), visualBoard);
 		FigureView destinationNode = vbm.getANode(aiMove.getDestinationLocation(), visualBoard);
@@ -166,13 +167,11 @@ public class Logic {
 		node.setOnDragOver(event -> {
 			event.acceptTransferModes(TransferMode.ANY);
 			event.consume();
-			System.out.println("Drag over");
 		});
 	}
 
 	public void setupDragDone(Node node, GridPane moveHighlighter) {
 		node.setOnDragDone(event -> {
-			System.out.println("DRAG FINISHED");
 
 			vbm.removeHighlights(availableMoves, moveHighlighter);
 		});
