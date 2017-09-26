@@ -5,10 +5,13 @@ public class ChessMove {
 	private int destinationLocation;
 
 	private int heuristicValue;
+	
+	private boolean isGameOver;
 
 	public ChessMove(int startingLocation, int destinationLocation) {
 		this.setStartingLocation(startingLocation);
 		this.setDestinationLocation(destinationLocation);
+		setIsGameOver(false);
 	}
 
 	public int getDestinationLocation() {
@@ -33,5 +36,13 @@ public class ChessMove {
 
 	public void setHeuristicValue(int heuristicValue) {
 		this.heuristicValue = heuristicValue;
+	}
+
+	public boolean isGameOver() {
+		return isGameOver;
+	}
+
+	public void setIsGameOver(boolean gameNotOver) {
+		this.isGameOver = gameNotOver;
 	}
 }

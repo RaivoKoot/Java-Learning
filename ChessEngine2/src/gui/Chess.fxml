@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -8,7 +14,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BoardController">
+<BorderPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BoardController">
    <center>
       <AnchorPane style="-fx-background-color: brown;" BorderPane.alignment="CENTER">
          <children>
@@ -77,4 +83,26 @@
          </children>
       </AnchorPane>
    </center>
+   <top>
+      <HBox alignment="CENTER" spacing="90.0">
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label text="Difficulty (Search Depth of Algorithm):" />
+                  <ChoiceBox fx:id="choiceBoxDepth" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <Label text="Chess">
+               <font>
+                  <Font name="Algerian" size="48.0" />
+               </font>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#btnStartPressed" text="New Game">
+               <HBox.margin>
+                  <Insets left="63.0" right="63.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </top>
 </BorderPane>

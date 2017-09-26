@@ -14,20 +14,23 @@ public class TurnManager {
 	private NumberBoardManipulator nbm;
 
 	private int callsToMinimax = 0;
-	
+
 	private int maximumCallsToMinimax = 0;
 
 	private boolean playersTurn;
+
+	private int chosenDepth;
 
 	// b pawn, b rook, b bishop, b knight, b queen, b king, w pawn, w rook, w
 	// bishop, w knight, w queen, w king
 	private final static int[] HEURISTIC_PIECE_VALUES = { 100, 500, 330, 320, 900, 20000, -100, -500, -330, -320, -900,
 			-20000 };
 
-	public TurnManager() {
+	public TurnManager(int chosenDepth) {
 		setPlayersTurn(true);
 		mc = new MoveCalculator();
 		nbm = new NumberBoardManipulator();
+		this.chosenDepth = chosenDepth;
 
 	}
 
@@ -43,6 +46,12 @@ public class TurnManager {
 		this.playersTurn = playersTurn;
 	}
 
+	/*
+	 * Evaluation function
+	 * counts up the black and white pieces on the field and adds up their
+	 * heuristic values
+	 * post: returns the heuristic difference between black and white pieces
+	 */
 	public int evaluateBoardByPieces(int[] numberBoard, ArrayList<Integer> aiPieceLocations,
 			ArrayList<Integer> userPieceLocations) {
 		int score = 0;
@@ -68,12 +77,20 @@ public class TurnManager {
 		return score;
 	}
 
+	/*
+	 * returns true if a player has lost his king
+	 * kings have a value of 20k, all other pieces together 3k
+	 * So if the boardValue is significantly high it means one kings is dead
+	 */
 	private boolean isGameOver(int heuristicValue) {
 		if (Math.abs(heuristicValue) > 10000)
 			return true;
 		return false;
 	}
 
+	/*
+	 * updates the lists that hold the locations of each players pieces
+	 */
 	private void updatePieceLocations(boolean aiTurn, ArrayList<Integer> aiPieceLocations,
 			ArrayList<Integer> userPieceLocations, ChessMove move) {
 		if (aiTurn)
@@ -99,26 +116,26 @@ public class TurnManager {
 			ArrayList<Integer> userPieceLocations, int depth, ChessMove aMove, int alpha, int beta) {
 
 		callsToMinimax++;
-		int alphaCopy = alpha;
-		int betaCopy = beta;
 
 		/* if heuristic value is over 10000 it means one player has lost his king and the game is over */
 		int heuristicValue = evaluateBoardByPieces(numberBoard, aiPieceLocations, userPieceLocations);
 		boolean gameIsOver = isGameOver(heuristicValue);
 
 		// return the heuristic value of node and the move
-		if (depth == 5 || gameIsOver) {
+		if (depth == chosenDepth || gameIsOver) {
 			aMove.setHeuristicValue(heuristicValue);
+			if (gameIsOver)
+				aMove.setIsGameOver(true);
 			return aMove;
 		} else {
 
 			ChessMove bestMove = new ChessMove(-1, -1);
 			ArrayList<Integer> currentPieceLocations;
+
 			/*
 			 * determines whether black or white pieces will be used for this iteration of minimax
 			 * post: currentPieceLocations is set to either ai's or user's pieces, bestmove is initialized
 			 */
-
 			if (aiTurn) {
 				bestMove.setHeuristicValue(-9999999);
 				currentPieceLocations = aiPieceLocations;
@@ -158,27 +175,27 @@ public class TurnManager {
 
 						// MINIMAX ON CHILD NODE
 						newMove = miniMax(!aiTurn, numberBoardCopy, aiPieceLocationsCopy, userPieceLocationsCopy,
-								depth + 1, newMove, alphaCopy, betaCopy);
+								depth + 1, newMove, alpha, beta);
 
 						if (aiTurn) {
 							if (newMove.getHeuristicValue() > bestMove.getHeuristicValue()) {
 
 								bestMove = newMove;
 
-								if (newMove.getHeuristicValue() > alphaCopy)
-									alphaCopy = newMove.getHeuristicValue();
+								if (newMove.getHeuristicValue() > alpha)
+									alpha = newMove.getHeuristicValue();
 
-								if (alphaCopy >= betaCopy)
+								if (alpha >= beta)
 									break root_loop;
 
 							}
 						} else if (newMove.getHeuristicValue() < bestMove.getHeuristicValue()) {
 							bestMove = newMove;
 
-							if (newMove.getHeuristicValue() < betaCopy)
-								betaCopy = newMove.getHeuristicValue();
+							if (newMove.getHeuristicValue() < beta)
+								beta = newMove.getHeuristicValue();
 
-							if (betaCopy <= alphaCopy)
+							if (beta <= alpha)
 								break root_loop;
 
 						}

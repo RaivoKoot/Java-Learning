@@ -23,14 +23,14 @@ public class Logic {
 	/*
 	 * constructor
 	 */
-	public Logic(GridPane visualBoard, GridPane moveHighlighter) {
+	public Logic(GridPane visualBoard, GridPane moveHighlighter, int chosenAlgoDepth) {
 		data = new BoardStorage(visualBoard, moveHighlighter);
 
 		vbm.populateGridPane(visualBoard, data.getNumberBoard());
 
 		setupDragAndDrop(visualBoard);
 
-		turnManager = new TurnManager();
+		turnManager = new TurnManager(chosenAlgoDepth);
 	}
 
 	/*
@@ -125,7 +125,9 @@ public class Logic {
 
 		executeAMove(movingNode, destinationNode, numberBoard, visualBoard);
 
-		turnManager.setPlayersTurn(true);
+		if (!aiMove.isGameOver())
+			turnManager.setPlayersTurn(true);
+		
 
 	}
 
