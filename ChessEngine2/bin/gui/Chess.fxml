@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BoardController">
+<BorderPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BoardController">
    <center>
-      <AnchorPane style="-fx-background-color: brown;" BorderPane.alignment="CENTER">
+      <AnchorPane>
          <children>
-            <ImageView fitHeight="750.0" fitWidth="750.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="750.0" fitWidth="750.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>
-                  <Image url="@../icons/Capture.PNG" />
+                  <Image url="@../icons/beautiful-green-leaves-and-bright-footage-012096746_prevstill.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="600.0" fitWidth="600.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="75.0">
-               <image>
-                  <Image url="@../icons/tile_background.png" />
-               </image>
-            </ImageView>
+            <AnchorPane layoutX="75.0" layoutY="75.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="75.0">
+               <children>
+                  <ImageView fitHeight="600.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/tile_background.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
             <GridPane fx:id="moveHighlighter" prefHeight="750.0" prefWidth="750.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -80,29 +86,39 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
             </GridPane>
+            <HBox alignment="CENTER" spacing="90.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0">
+               <children>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Label text="Difficulty" textFill="WHITE">
+                           <font>
+                              <Font name="Book Antiqua" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label text="(Search Depth of Algorithm)" textFill="WHITE">
+                           <font>
+                              <Font name="Book Antiqua" size="12.0" />
+                           </font>
+                        </Label>
+                        <ChoiceBox fx:id="choiceBoxDepth" prefWidth="150.0" />
+                     </children>
+                  </VBox>
+                  <Label text="Chess" textFill="WHITE">
+                     <font>
+                        <Font name="Book Antiqua" size="48.0" />
+                     </font>
+                  </Label>
+                  <Button mnemonicParsing="false" onAction="#btnStartPressed" text="New Game">
+                     <HBox.margin>
+                        <Insets left="68.0" top="35.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </HBox>
          </children>
       </AnchorPane>
    </center>
-   <top>
-      <HBox alignment="CENTER" spacing="90.0">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label text="Difficulty (Search Depth of Algorithm):" />
-                  <ChoiceBox fx:id="choiceBoxDepth" prefWidth="150.0" />
-               </children>
-            </VBox>
-            <Label text="Chess">
-               <font>
-                  <Font name="Algerian" size="48.0" />
-               </font>
-            </Label>
-            <Button mnemonicParsing="false" onAction="#btnStartPressed" text="New Game">
-               <HBox.margin>
-                  <Insets left="63.0" right="63.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
-   </top>
 </BorderPane>
