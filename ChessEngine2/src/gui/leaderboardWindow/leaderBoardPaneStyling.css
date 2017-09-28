@@ -5,7 +5,7 @@
 	-fx-background-color: darkgray;
 }
 
-.jfx-text-field{
-	-jfx-focus-color: darkgray;
-	-jfx-unfocus-color: darkgray; 
+
+.label {
+	-fx-font: Book Antiqua;
 }

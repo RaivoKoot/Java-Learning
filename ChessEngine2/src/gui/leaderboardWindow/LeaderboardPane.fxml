@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<BorderPane prefWidth="650.0" stylesheets="@leaderBoardPaneStyling.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <VBox>
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label text="Display Statistics for following Depth" underline="true">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <JFXComboBox />
+               </children>
+            </VBox>
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Amount of games AI has played:">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label text="Amount of games AI has lost:" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label text="53" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Bookshelf Symbol 7" size="36.0" />
+                     </font>
+                     <padding>
+                        <Insets left="30.0" right="30.0" />
+                     </padding>
+                  </Label>
+                  <Label text="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Bookshelf Symbol 7" size="36.0" />
+                     </font>
+                     <padding>
+                        <Insets left="30.0" right="30.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </GridPane>
+            <TableView prefHeight="200.0">
+              <columns>
+                  <TableColumn prefWidth="55.0" text="Wins" />
+                  <TableColumn prefWidth="55.0" text="Losses" />
+                <TableColumn prefWidth="140.8148193359375" text="Player" />
+                  <TableColumn prefWidth="105.0" text="Games Started" />
+                <TableColumn prefWidth="165.0" text="Games Played (+10 Turns)" />
+              </columns>
+            </TableView>
+         </children>
+      </VBox>
+   </center>
+   <top>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Label">
+               <font>
+                  <Font size="48.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </top>
+</BorderPane>

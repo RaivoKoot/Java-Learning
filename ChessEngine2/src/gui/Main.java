@@ -10,7 +10,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("Chess.fxml"));
+			BorderPane root = FXMLLoader.load(getClass().getResource("GameboardPane.fxml"));
 			Scene scene = new Scene(root);
 			
 
