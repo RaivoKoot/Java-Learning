@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <VBox alignment="CENTER">
+         <children>
+            <Label text="Display Statistics for following Difficulty">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <JFXComboBox focusColor="BLACK">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </JFXComboBox>
+            <Separator prefWidth="200.0" />
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Amount of games AI has played:">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label text="Amount of games AI has lost:" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label text="53" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Bookshelf Symbol 7" size="36.0" />
+                     </font>
+                     <padding>
+                        <Insets left="30.0" right="30.0" />
+                     </padding>
+                  </Label>
+                  <Label text="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Bookshelf Symbol 7" size="36.0" />
+                     </font>
+                     <padding>
+                        <Insets left="30.0" right="30.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </GridPane>
+            <TableView prefHeight="200.0" prefWidth="600.0">
+              <columns>
+                  <TableColumn prefWidth="55.0" text="Wins" />
+                  <TableColumn prefWidth="55.0" text="Losses" />
+                <TableColumn prefWidth="100.0" text="Player" />
+                  <TableColumn prefWidth="105.0" text="Games Started" />
+                <TableColumn prefWidth="165.0" text="Games (10+ Turns)" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+         </children>
+      </VBox>
+   </center>
+   <top>
+      <Label text="Leaderboards" underline="true" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Book Antiqua" size="48.0" />
+         </font>
+      </Label>
+   </top>
+</BorderPane>

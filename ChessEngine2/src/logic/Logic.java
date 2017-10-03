@@ -9,12 +9,17 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import turnManagement.TurnManager;
+import logic.AI.Minimax;
+import logic.boardManipulators.NumberBoardManipulator;
+import logic.boardManipulators.VisualBoardManipulator;
+import logic.dataTypes.ChessMove;
+import logic.dataTypes.ChessPiece;
+import logic.moveGenerator.MoveCalculator;
 
 public class Logic {
 
 	private BoardStorage data;
-	private TurnManager turnManager;
+	private Minimax turnManager;
 
 	private MoveCalculator mc = new MoveCalculator();
 	private NumberBoardManipulator nbm = new NumberBoardManipulator();
@@ -30,14 +35,14 @@ public class Logic {
 
 		setupDragAndDrop(visualBoard);
 
-		turnManager = new TurnManager(chosenAlgoDepth);
+		turnManager = new Minimax(chosenAlgoDepth);
 	}
 
 	/*
 	 * Drag and Drop implementation
 	 */
 
-	FigureView sourcePiece;
+	ChessPiece sourcePiece;
 	ArrayList<Integer> availableMoves;
 	ArrayList<Region> highlightedFields;
 
@@ -61,7 +66,7 @@ public class Logic {
 	public void setupDragDetection(Node node, GridPane moveHighlightingPane) {
 		node.setOnDragDetected(event -> {
 
-			FigureView originPiece = (FigureView) event.getSource();
+			ChessPiece originPiece = (ChessPiece) event.getSource();
 
 			if (originPiece.getType() > -1)
 				event.consume();
@@ -89,7 +94,7 @@ public class Logic {
 
 	public void setupDragDropped(Node node) {
 		node.setOnDragDropped(event -> {
-			FigureView destinationNode = (FigureView) event.getSource();
+			ChessPiece destinationNode = (ChessPiece) event.getSource();
 
 			int dropLocation = destinationNode.getArraylocation();
 
@@ -120,8 +125,8 @@ public class Logic {
 		ChessMove aiMove = turnManager.miniMax(makeBlackTurn, data.getNumberBoard(), data.getAiPieceLocations(),
 				data.getUserPieceLocations(), 0, null, -9999999, 9999999);
 
-		FigureView movingNode = vbm.getANode(aiMove.getStartingLocation(), visualBoard);
-		FigureView destinationNode = vbm.getANode(aiMove.getDestinationLocation(), visualBoard);
+		ChessPiece movingNode = vbm.getANode(aiMove.getStartingLocation(), visualBoard);
+		ChessPiece destinationNode = vbm.getANode(aiMove.getDestinationLocation(), visualBoard);
 
 		executeAMove(movingNode, destinationNode, numberBoard, visualBoard);
 
@@ -131,7 +136,7 @@ public class Logic {
 
 	}
 
-	public void executeAMove(FigureView movingNode, FigureView destinationNode, int[] numberBoard,
+	public void executeAMove(ChessPiece movingNode, ChessPiece destinationNode, int[] numberBoard,
 			GridPane visualBoard) {
 
 		// save the dragged pieces location before it is moved
