@@ -69,10 +69,9 @@
             <TableView prefHeight="200.0" prefWidth="600.0">
               <columns>
                   <TableColumn prefWidth="55.0" text="Wins" />
-                  <TableColumn prefWidth="55.0" text="Losses" />
-                <TableColumn prefWidth="100.0" text="Player" />
                   <TableColumn prefWidth="105.0" text="Games Started" />
                 <TableColumn prefWidth="165.0" text="Games (10+ Turns)" />
+                <TableColumn prefWidth="100.0" text="Player" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

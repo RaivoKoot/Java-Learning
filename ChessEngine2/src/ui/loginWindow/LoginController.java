@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXTextField;
 
+import data.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
@@ -14,6 +15,8 @@ public class LoginController implements Initializable {
 
 	@FXML
 	JFXTextField usernameField;
+
+	DatabaseConnection databaseConnection = new DatabaseConnection();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -26,14 +29,19 @@ public class LoginController implements Initializable {
 	}
 
 	public void checkIfLoginValid(JFXTextField usernameField) {
-		String enteredName = usernameField.getText();
-		
-		if (!enteredName.isEmpty()) {
-			Main.launchChessboardWindow();
-			Stage thisStage = (Stage) usernameField.getScene().getWindow();
+		String username = usernameField.getText();
 
-			thisStage.close();
-		}
+		if (username.isEmpty())
+			return;
+
+		DatabaseConnection.setPlayerName(username);
+
+		databaseConnection.enterNewPlayer(username);
+
+		Main.launchChessboardWindow();
+		Stage thisStage = (Stage) usernameField.getScene().getWindow();
+
+		thisStage.close();
 	}
 
 }

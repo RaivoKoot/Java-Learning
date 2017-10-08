@@ -82,8 +82,8 @@ public class Minimax {
 	 * kings have a value of 20k, all other pieces together 3k
 	 * So if the boardValue is significantly high it means one kings is dead
 	 */
-	private boolean isGameOver(int heuristicValue) {
-		if (Math.abs(heuristicValue) > 10000)
+	public boolean isGameOver(int heuristicValue) {
+		if (Math.abs(heuristicValue) > 12000)
 			return true;
 		return false;
 	}
