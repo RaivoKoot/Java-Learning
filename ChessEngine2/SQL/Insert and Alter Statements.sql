@@ -1,3 +1,6 @@
+/* checks if player name exists */
+SELECT EXISTS(SELECT * FROM t_player_game_counts WHERE pk_playerName = 'Name' )
+
 /* Create new Tuple for a name and a difficulty*/
 INSERT INTO t_player_game_counts VALUES('Name', 2 , DEFAULT, DEFAULT, DEFAULT)
 

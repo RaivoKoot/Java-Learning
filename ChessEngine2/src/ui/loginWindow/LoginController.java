@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXTextField;
 
-import data.DatabaseConnection;
+import data.statisticsFromDatabase.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;

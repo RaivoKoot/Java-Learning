@@ -1,8 +1,9 @@
 package logic.DragAndDropEventHandling;
 
 import java.util.ArrayList;
-import data.DatabaseConnection;
-import data.GameStateData;
+
+import data.localGameData.GameStateData;
+import data.statisticsFromDatabase.DatabaseConnection;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.input.ClipboardContent;
@@ -179,6 +180,8 @@ public class DragAndDropEventHandlers {
 
 		turnNumber++;
 
+		if (turnNumber == 1)
+			recordGameStarted();
 		if (turnNumber == 10)
 			gameHasReachedTenTurns();
 
@@ -192,6 +195,11 @@ public class DragAndDropEventHandlers {
 			return true;
 		else
 			return false;
+	}
+
+	private static void recordGameStarted() {
+		databaseConnection.incrementGamesPlayedAmount(DatabaseConnection.getDifficulty(),
+				DatabaseConnection.getPlayerName());
 	}
 
 	private static void recordPlayerWin() {

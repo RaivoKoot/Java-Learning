@@ -1,11 +1,13 @@
-package data;
+package data.statisticsFromDatabase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class DatabaseConnection implements CanInsertDataIntoDB {
+import javafx.collections.ObservableList;
+
+public class DatabaseConnection implements CanInsertDataIntoDB, CanPullStatsFromDB {
 
 	private String driver = "com.mysql.jdbc.Driver";
 	private String url = "jdbc:mysql://localhost/chess";
@@ -144,5 +146,80 @@ public class DatabaseConnection implements CanInsertDataIntoDB {
 			ex.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public ResultSet getStatList(int difficulty) {
+
+		String sqlCommand = SQLCommands.getAllPlayerStatsForSpecificDifficultySQLCommand(difficulty);
+
+		ResultSet resultSet = null;
+
+		try {
+			createConnection();
+
+			resultSet = statement.executeQuery(sqlCommand);
+
+			//connection.close();
+			//statement.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return resultSet;
+
+	}
+
+	@Override
+	public int[] getSumOfGamesAndSumOfWins(int difficulty) {
+		String sqlCommand = SQLCommands.getSumOfGamesAndSumOfWinsByDifficultySQLCommand(difficulty);
+
+		int[] gamesAndWins = new int[2];
+
+		try {
+			createConnection();
+
+			ResultSet resultSet = statement.executeQuery(sqlCommand);
+
+			resultSet.next();
+			
+			gamesAndWins[0] = resultSet.getInt(1);
+			gamesAndWins[1] = resultSet.getInt(2);
+
+			connection.close();
+			statement.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return gamesAndWins;
+	}
+
+	@Override
+	public int[] getSumOfGamesAndSumOfWinsAllDifficulties() {
+		String sqlCommand = SQLCommands.getCompleteSumOfGamesAndSumOfWinsSQLCommand();
+
+		int[] gamesAndWins = new int[2];
+
+		try {
+			createConnection();
+
+			ResultSet resultSet = statement.executeQuery(sqlCommand);
+
+			resultSet.next();
+			
+			gamesAndWins[0] = resultSet.getInt(1);
+			gamesAndWins[1] = resultSet.getInt(2);
+
+			connection.close();
+			statement.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return gamesAndWins;
 	}
 }

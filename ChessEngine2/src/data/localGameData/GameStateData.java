@@ -1,4 +1,4 @@
-package data;
+package data.localGameData;
 
 import java.util.ArrayList;
 import java.util.Arrays;

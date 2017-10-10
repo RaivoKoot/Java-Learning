@@ -3,7 +3,7 @@ package ui.chessboardWindow;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import data.DatabaseConnection;
+import data.statisticsFromDatabase.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -38,8 +38,6 @@ public class GameboardController implements Initializable {
 
 	@FXML
 	Button leaderboardButton;
-	
-	DatabaseConnection databaseConnection = new DatabaseConnection();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -69,8 +67,6 @@ public class GameboardController implements Initializable {
 			return;
 
 		DatabaseConnection.setDifficulty(choiceBoxDifficulty.getValue());
-		
-		databaseConnection.incrementGamesPlayedAmount(DatabaseConnection.getDifficulty(), DatabaseConnection.getPlayerName());
 		
 		visualBoard.getChildren().clear();
 		logic = new Logic(visualBoard, moveHighlighter, choiceBoxDifficulty.getValue());
