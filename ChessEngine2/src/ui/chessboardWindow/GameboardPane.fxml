@@ -82,9 +82,6 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
-               <effect>
-                  <DropShadow height="5.0" radius="2.0" width="5.0" />
-               </effect>
             </GridPane>
             <HBox alignment="CENTER" maxHeight="70.0" spacing="70.0" StackPane.alignment="TOP_CENTER">
                <children>
