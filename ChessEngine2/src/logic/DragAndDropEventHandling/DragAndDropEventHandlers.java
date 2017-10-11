@@ -136,6 +136,8 @@ public class DragAndDropEventHandlers {
 		ChessMove aiMove = aiAlgorithm.miniMax(makeBlackTurn, gameStateData.getNumberBoard(),
 				gameStateData.getAiPieceLocations(), gameStateData.getUserPieceLocations(), 0, null, -9999999, 9999999);
 
+		System.out.println("Heuristic: " + aiMove.getHeuristicValue());
+
 		ChessPiece movingNode = vbm.getANode(aiMove.getStartingLocation(), visualBoard);
 		ChessPiece destinationNode = vbm.getANode(aiMove.getDestinationLocation(), visualBoard);
 

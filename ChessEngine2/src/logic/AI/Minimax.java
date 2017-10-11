@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import data.localGameData.PieceSquareValueConstants;
 import logic.boardManipulators.NumberBoardManipulator;
 import logic.dataTypes.ChessMove;
 import logic.moveGenerator.MoveCalculator;
@@ -61,6 +62,7 @@ public class Minimax {
 			int type = 100;
 			for (int i = 0; i < 2; i++)
 				for (int k = 0; k < allPieces[i].size(); k++) {
+
 					type = numberBoard[(int) allPieces[i].get(k)];
 
 					if (type < 0) {
@@ -70,6 +72,11 @@ public class Minimax {
 						type--;
 
 					score += HEURISTIC_PIECE_VALUES[type];
+					/*
+					 * add value from piece location
+					 */
+					int locationValue = PieceSquareValueConstants.getSquareValues()[type][(int) allPieces[i].get(k)];
+					score += locationValue;
 				}
 		} catch (Exception e) {
 			e.printStackTrace();
