@@ -1,6 +1,7 @@
 package logic.AI;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -116,16 +117,24 @@ public class Minimax {
 		this.callsToMinimax = callsToMinimax;
 	}
 
+	public int getMaximumCallsToMinimax() {
+		return maximumCallsToMinimax;
+	}
+
+	public void setMaximumCallsToMinimax(int maximumCallsToMinimax) {
+		this.maximumCallsToMinimax = maximumCallsToMinimax;
+	}
+
 	/*
 	 * Main Algorithm for AI player
 	 */
-	public ChessMove miniMax(boolean aiTurn, int[] numberBoard, ArrayList<Integer> aiPieceLocations,
+	public ChessMove miniMax(boolean aiTurn, int[] gameState, ArrayList<Integer> aiPieceLocations,
 			ArrayList<Integer> userPieceLocations, int depth, ChessMove aMove, int alpha, int beta) {
 
 		callsToMinimax++;
 
 		/* if heuristic value is over 10000 it means one player has lost his king and the game is over */
-		int heuristicValue = evaluateBoardByPieces(numberBoard, aiPieceLocations, userPieceLocations);
+		int heuristicValue = evaluateBoardByPieces(gameState, aiPieceLocations, userPieceLocations);
 		boolean gameIsOver = isGameOver(heuristicValue);
 
 		// return the heuristic value of node and the move
@@ -151,6 +160,8 @@ public class Minimax {
 				currentPieceLocations = userPieceLocations;
 			}
 
+			BubbleSortPieceLocations.sort(gameState, currentPieceLocations);
+
 			/*
 			 * generates all possible moves 
 			 * post: allPossibleMoves is filled with moves that include their heuristic value
@@ -160,7 +171,7 @@ public class Minimax {
 
 					int originLocation = currentPieceLocations.get(i);
 
-					ArrayList<Integer> possibleMovesForPiece = mc.generatePossibleMoves(originLocation, numberBoard);
+					ArrayList<Integer> possibleMovesForPiece = mc.generatePossibleMoves(originLocation, gameState);
 
 					/*
 					 * call miniMax on each move to ultimately get its heuristic value
@@ -171,7 +182,7 @@ public class Minimax {
 
 						// creates a copy of the numberboad and updates it for
 						// the new move
-						int[] numberBoardCopy = numberBoard.clone();
+						int[] numberBoardCopy = gameState.clone();
 						nbm.makeMove(newMove, numberBoardCopy);
 
 						// creates copies of the piece location lists and
@@ -222,11 +233,4 @@ public class Minimax {
 		}
 	}
 
-	public int getMaximumCallsToMinimax() {
-		return maximumCallsToMinimax;
-	}
-
-	public void setMaximumCallsToMinimax(int maximumCallsToMinimax) {
-		this.maximumCallsToMinimax = maximumCallsToMinimax;
-	}
 }

@@ -20,6 +20,8 @@ import logic.moveGenerator.MoveCalculator;
 
 public class DragAndDropEventHandlers {
 
+	private static ArrayList<Double> moveTimes = new ArrayList<Double>();
+
 	private static GameStateData gameStateData;
 	private static Minimax aiAlgorithm;
 
@@ -119,24 +121,35 @@ public class DragAndDropEventHandlers {
 				// make AI move
 				makeAIMove(true, gameStateData.getNumberBoard(), gameStateData.getVisualBoard());
 
-				/*
 				System.out.println("Calls to Minimax Function:" + aiAlgorithm.getCallsToMinimax());
 				if (aiAlgorithm.getCallsToMinimax() > aiAlgorithm.getMaximumCallsToMinimax())
 					aiAlgorithm.setMaximumCallsToMinimax(aiAlgorithm.getCallsToMinimax());
 				aiAlgorithm.setCallsToMinimax(0);
 				System.out
 						.println("\nmaximum calls to minimax: " + aiAlgorithm.getMaximumCallsToMinimax() / 1000 + "k");
-						*/
+
 			}
 		});
 	}
 
 	public static void makeAIMove(boolean makeBlackTurn, int[] numberBoard, GridPane visualBoard) {
 
+		long startTime = System.currentTimeMillis();
 		ChessMove aiMove = aiAlgorithm.miniMax(makeBlackTurn, gameStateData.getNumberBoard(),
 				gameStateData.getAiPieceLocations(), gameStateData.getUserPieceLocations(), 0, null, -9999999, 9999999);
+		long endTime = System.currentTimeMillis();
+		// System.out.println("Heuristic: " + aiMove.getHeuristicValue());
+		// System.out.println("It took " + (endTime - startTime) + "
+		// milliseconds");
+		moveTimes.add((double) (endTime - startTime) / 1000);
 
-		System.out.println("Heuristic: " + aiMove.getHeuristicValue());
+		double sum = 0;
+
+		for (int i = 0; i < moveTimes.size(); i++) {
+			sum += moveTimes.get(i);
+		}
+
+		System.out.println("Average move time: " + sum / moveTimes.size());
 
 		ChessPiece movingNode = vbm.getANode(aiMove.getStartingLocation(), visualBoard);
 		ChessPiece destinationNode = vbm.getANode(aiMove.getDestinationLocation(), visualBoard);
