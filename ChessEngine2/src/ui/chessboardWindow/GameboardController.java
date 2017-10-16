@@ -20,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import logic.Logic;
 import logic.DragAndDropEventHandling.DragAndDropEventHandlers;
+import start.Main;
 import ui.GUIWindowLauncher;
 
 public class GameboardController implements Initializable {
@@ -55,7 +56,7 @@ public class GameboardController implements Initializable {
 
 	public void setPaneBackgroundImage(Pane pane) {
 		BackgroundImage background = new BackgroundImage(
-				new Image("file:backgroundImage2.jpg", 1920, 1080, false, true), BackgroundRepeat.REPEAT,
+				new Image(Main.class.getResource("/backgroundImage2.jpg").toString(), 1920, 1080, false, true), BackgroundRepeat.REPEAT,
 				BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
 
 		pane.setBackground(new Background(background));

@@ -131,7 +131,7 @@ public class Minimax {
 	public ChessMove miniMax(boolean aiTurn, int[] gameState, ArrayList<Integer> aiPieceLocations,
 			ArrayList<Integer> userPieceLocations, int depth, ChessMove aMove, int alpha, int beta) {
 
-		callsToMinimax++;
+		//callsToMinimax++;
 
 		/* if heuristic value is over 10000 it means one player has lost his king and the game is over */
 		int heuristicValue = evaluateBoardByPieces(gameState, aiPieceLocations, userPieceLocations);

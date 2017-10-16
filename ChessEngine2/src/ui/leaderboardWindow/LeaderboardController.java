@@ -27,6 +27,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import logic.statisticsFormatting.StatisticsFormatter;
 import logic.statisticsFormatting.TableViewChild;
+import start.Main;
 
 public class LeaderboardController implements Initializable {
 
@@ -144,8 +145,8 @@ public class LeaderboardController implements Initializable {
 			double playerWinPercentage = gamesAndWins[1] / overallGames * 100;
 			double aiWinPercentage = (overallGames - gamesAndWins[1]) / overallGames * 100;
 
-			playerWinPercentage = Double.parseDouble(df.format(playerWinPercentage));
-			aiWinPercentage = Double.parseDouble(df.format(aiWinPercentage));
+			playerWinPercentage = Double.parseDouble(df.format(playerWinPercentage).replaceAll(",", "."));
+			aiWinPercentage = Double.parseDouble(df.format(aiWinPercentage).replaceAll(",", "."));
 
 			PieChart.Data aiWinsSlice = new PieChart.Data("AI Wins", aiWinPercentage);
 			PieChart.Data playerWinsSlice = new PieChart.Data("Player Wins", playerWinPercentage);
@@ -170,8 +171,8 @@ public class LeaderboardController implements Initializable {
 
 	public void setPaneBackgroundImage(Pane pane) {
 		BackgroundImage background = new BackgroundImage(
-				new Image("file:backgroundImage2.jpg", 1920, 1080, false, true), BackgroundRepeat.REPEAT,
-				BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+				new Image(Main.class.getResource("/backgroundImage2.jpg").toString(), 1920, 1080, false, true),
+				BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
 
 		pane.setBackground(new Background(background));
 	}
