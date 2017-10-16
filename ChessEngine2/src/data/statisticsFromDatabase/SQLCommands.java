@@ -70,4 +70,9 @@ public class SQLCommands {
 		return sqlAllWinsAllGames;
 	}
 
+	public static String getAiLossesSQLCommand() {
+		String lostOnDifficulties = "SELECT DISTINCT pk_difficulty FROM t_player_game_counts WHERE wins > 0";
+		return lostOnDifficulties;
+	}
+
 }

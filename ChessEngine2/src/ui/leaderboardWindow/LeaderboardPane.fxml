@@ -93,12 +93,12 @@
                <children>
                   <VBox>
                      <children>
-                        <Label text="No one has been able to beat the game at difficulty 5" textFill="WHITE">
+                        <Label fx:id="neverLost5" text="No one has been able to beat the game at difficulty 5" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Label text="No one has been able to beat the game at difficulty 4" textFill="WHITE">
+                        <Label fx:id="neverLost4" text="No one has been able to beat the game at difficulty 4" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>

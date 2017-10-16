@@ -9,10 +9,8 @@ import javafx.collections.ObservableList;
 
 public class DatabaseConnection implements CanInsertDataIntoDB, CanPullStatsFromDB {
 
-	private String driver = "com.mysql.jdbc.Driver";
-	private String url = "jdbc:mysql://localhost/chess";
-	private String user = "root";
-	private String password = "";
+	private String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+	private String url = "jdbc:sqlserver://raivo-koots-server.database.windows.net:1433;database=ChessDatabase;user=Raivo.Koot@raivo-koots-server;password=Homolas1ss!;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
 	private Connection connection;
 	private Statement statement;
@@ -23,7 +21,7 @@ public class DatabaseConnection implements CanInsertDataIntoDB, CanPullStatsFrom
 	private void createConnection() {
 		try {
 			Class.forName(driver);
-			connection = DriverManager.getConnection(url, user, password);
+			connection = DriverManager.getConnection(url);
 			statement = connection.createStatement();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -160,8 +158,8 @@ public class DatabaseConnection implements CanInsertDataIntoDB, CanPullStatsFrom
 
 			resultSet = statement.executeQuery(sqlCommand);
 
-			//connection.close();
-			//statement.close();
+			// connection.close();
+			// statement.close();
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -183,7 +181,7 @@ public class DatabaseConnection implements CanInsertDataIntoDB, CanPullStatsFrom
 			ResultSet resultSet = statement.executeQuery(sqlCommand);
 
 			resultSet.next();
-			
+
 			gamesAndWins[0] = resultSet.getInt(1);
 			gamesAndWins[1] = resultSet.getInt(2);
 
@@ -209,7 +207,7 @@ public class DatabaseConnection implements CanInsertDataIntoDB, CanPullStatsFrom
 			ResultSet resultSet = statement.executeQuery(sqlCommand);
 
 			resultSet.next();
-			
+
 			gamesAndWins[0] = resultSet.getInt(1);
 			gamesAndWins[1] = resultSet.getInt(2);
 
@@ -221,5 +219,29 @@ public class DatabaseConnection implements CanInsertDataIntoDB, CanPullStatsFrom
 		}
 
 		return gamesAndWins;
+	}
+
+	@Override
+	public int[] getHasAiLostOnDifficulty145() {
+		String sqlCommand = SQLCommands.getAiLossesSQLCommand();
+
+		int[] aiLost = { -1, -1, -1, -1, -1 };
+
+		try {
+			createConnection();
+
+			ResultSet resultSet = statement.executeQuery(sqlCommand);
+
+			for (int i = 0; resultSet.next(); i++)
+				aiLost[i] = resultSet.getInt(i + 1);
+
+			connection.close();
+			statement.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return aiLost;
 	}
 }

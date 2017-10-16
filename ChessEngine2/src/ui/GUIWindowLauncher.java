@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-public class Main extends Application {
+public class GUIWindowLauncher extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -24,7 +24,7 @@ public class Main extends Application {
 	public static void launchChessboardWindow() {
 		try {
 
-			Parent gameBoard = FXMLLoader.load(Main.class.getResource("chessboardWindow/GameboardPane.fxml"));
+			Parent gameBoard = FXMLLoader.load(GUIWindowLauncher.class.getResource("chessboardWindow/GameboardPane.fxml"));
 			Stage gameBoardStage = new Stage();
 
 			gameBoardStage.setScene(new Scene(gameBoard));
@@ -38,7 +38,7 @@ public class Main extends Application {
 	public static void launchLeaderboardWindow() {
 		try {
 
-			Parent leaderBoardPane = FXMLLoader.load(Main.class.getResource("leaderboardWindow/LeaderboardPane.fxml"));
+			Parent leaderBoardPane = FXMLLoader.load(GUIWindowLauncher.class.getResource("leaderboardWindow/LeaderboardPane.fxml"));
 			Stage leaderBoardStage = new Stage();
 
 			leaderBoardStage.setTitle("Leaderboards");

@@ -56,6 +56,11 @@ public class LeaderboardController implements Initializable {
 	@FXML
 	HBox paneForCharts;
 
+	@FXML
+	Label neverLost5;
+	@FXML
+	Label neverLost4;
+
 	private StatisticsFormatter statPuller;
 
 	@Override
@@ -69,6 +74,7 @@ public class LeaderboardController implements Initializable {
 
 		refreshTableViewChildren(5);
 		refreshSumOfGamesAndWins(5);
+		refreshNeverLostLabels();
 
 		addDifficultyChoiceListener();
 
@@ -76,6 +82,18 @@ public class LeaderboardController implements Initializable {
 
 		setPaneBackgroundImage(rootPane);
 
+	}
+
+	private void refreshNeverLostLabels() {
+		int[] aiLosses = statPuller.getHasAiLostOnDifficulty145();
+		for (int i = 0; i < aiLosses.length; i++) {
+
+			if (aiLosses[i] > 0 && aiLosses[i] < 6)
+				if (aiLosses[i] == 5)
+					neverLost5.setVisible(false);
+				else if (aiLosses[i] == 4)
+					neverLost4.setVisible(false);
+		}
 	}
 
 	private void addDifficultyChoiceListener() {

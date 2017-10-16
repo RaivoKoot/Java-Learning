@@ -9,7 +9,7 @@ import data.statisticsFromDatabase.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
-import ui.Main;
+import ui.GUIWindowLauncher;
 
 public class LoginController implements Initializable {
 
@@ -38,7 +38,7 @@ public class LoginController implements Initializable {
 
 		databaseConnection.enterNewPlayer(username);
 
-		Main.launchChessboardWindow();
+		GUIWindowLauncher.launchChessboardWindow();
 		Stage thisStage = (Stage) usernameField.getScene().getWindow();
 
 		thisStage.close();

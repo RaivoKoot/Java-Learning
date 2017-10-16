@@ -60,4 +60,10 @@ public class StatisticsFormatter implements CanGetAndFormatGameStatistics {
 		return sumOfGamesAndWins;
 	}
 
+	@Override
+	public int[] getHasAiLostOnDifficulty145() {
+		int[] aiLosses = databaseConnection.getHasAiLostOnDifficulty145();
+		return aiLosses;
+	}
+
 }

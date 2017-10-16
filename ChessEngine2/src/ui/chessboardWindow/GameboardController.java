@@ -20,7 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import logic.Logic;
 import logic.DragAndDropEventHandling.DragAndDropEventHandlers;
-import ui.Main;
+import ui.GUIWindowLauncher;
 
 public class GameboardController implements Initializable {
 
@@ -50,7 +50,7 @@ public class GameboardController implements Initializable {
 	}
 
 	public void leaderboardButtonPressed() {
-		Main.launchLeaderboardWindow();
+		GUIWindowLauncher.launchLeaderboardWindow();
 	}
 
 	public void setPaneBackgroundImage(Pane pane) {

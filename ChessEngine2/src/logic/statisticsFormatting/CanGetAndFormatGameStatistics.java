@@ -10,4 +10,6 @@ public interface CanGetAndFormatGameStatistics {
 
 	int[] getAllSumOfGamesAndWins();
 
+	int[] getHasAiLostOnDifficulty145();
+
 }
