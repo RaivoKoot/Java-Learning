@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 public class DatabaseConnection implements CanInsertDataIntoDB, CanPullStatsFromDB {
 
 	private String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-	private String url = "jdbc:sqlserver://raivo-koots-server.database.windows.net:1433;database=ChessDatabase;user=Raivo.Koot@raivo-koots-server;password=Homolas1ss!;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+	private String url = "jdbc:sqlserver://raivo-koots-server.database.windows.net:1433;database=ChessDatabase;user=ClientLogin@raivo-koots-server;password=<Password1>;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
 	private Connection connection;
 	private Statement statement;
