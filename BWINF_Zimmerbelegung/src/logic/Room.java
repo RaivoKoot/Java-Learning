@@ -27,6 +27,7 @@ public class Room {
 	// adds a student to the room's occupants
 	public void addStudent(Student student, boolean addHates) {
 		occupants.add(student);
+		student.setRoom(this);
 
 		if (addHates)
 			addHates(student.getHateList());

@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.ArrayList;
+
 import data.DataStorage;
 import data.PullFromInputFile;
 
@@ -10,12 +12,14 @@ public class Testklasse {
 		PullFromInputFile.collectData();
 		// DataStorage.printStudents();
 
-		Room room1 = new Room();
-		room1.addStudent(DataStorage.getStudent("Lea"), true);
-		room1.addStudent(DataStorage.getStudent("Hannah"), true);
-		room1.addStudent(DataStorage.getStudent("Annika"), true);
+		ArrayList<Student> students = DataStorage.getStudents();
 
-		room1.printHates();
+		ArrayList<Room> roomConstellation = RoomCreator.createRoomConstellation(students);
+
+		System.out.println();
+		ListPrinter.printRoomList(roomConstellation);
+		
+	
 
 	}
 }

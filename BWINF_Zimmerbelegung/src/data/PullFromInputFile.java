@@ -10,7 +10,7 @@ import logic.Student;
 
 public class PullFromInputFile {
 
-	private static String fileName = "zimmerbelegung6.txt";
+	private static String fileName = "zimmerbelegung3.txt";
 
 	private static String line;
 
@@ -53,8 +53,11 @@ public class PullFromInputFile {
 	public static ArrayList<Student> extractNamesFromString(String line) {
 		line = line.substring(2); // remove the + or -
 
-		String loveArray[] = line.split(" "); // turn String into List
-		ListPrinter.printArray(loveArray);
+		String loveArray[] = line.split(" "); // turn String into List\
+
+		if (loveArray[0].isEmpty())
+			return new ArrayList<Student>();
+
 		ArrayList<Student> loveList = new ArrayList<Student>();
 
 		// turn String array into List of Student Objects

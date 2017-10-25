@@ -13,6 +13,19 @@ public class ListPrinter {
 
 	public static void printArray(String[] array) {
 		for (int i = 0; i < array.length; i++)
-			System.out.println("index " + i + " " + array[i]);
+			System.out.println(array[i] + ", ");
+	}
+
+	public static void printRoomList(ArrayList<Room> rooms) {
+
+		for (Room temp : rooms) {
+			System.out.print("\nROOM\n");
+			ArrayList<Student> roomsOccupants = temp.getOccupants();
+			// System.out.print("\n"+roomsOccupants.size()+"\n");
+			for (Student temp2 : roomsOccupants)
+				System.out.print(temp2.getName() + ", ");
+			System.out.print("\n\n");
+		}
+
 	}
 }

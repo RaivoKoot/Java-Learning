@@ -19,13 +19,9 @@ public class DataStorage {
 	// if so: return the existent student object
 	// otherwise: create a new student object with the given name and return this
 	public static Student getStudent(String name) {
-		for (Student temp : fullListOfStudents) {
-			System.out.println("Student name 1: " + temp.getName());
-			System.out.println("Student name 2: " + name + "\n");
+		for (Student temp : fullListOfStudents)
 			if (temp.getName().equals(name))
 				return temp;
-
-		}
 
 		Student newStudent = new Student();
 		newStudent.setName(name);
@@ -65,6 +61,10 @@ public class DataStorage {
 		fullListOfStudents.sort(null);
 		for (Student temp : fullListOfStudents)
 			System.out.println(temp.getName());
+	}
+
+	public static ArrayList<Student> getStudents() {
+		return fullListOfStudents;
 	}
 
 	public static ArrayList<Room> getRoomList() {

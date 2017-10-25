@@ -13,7 +13,7 @@ public class Student implements Comparable<Student> {
 	private ArrayList<Student> hateList;
 
 	// room that the student shall reside in
-	private Room studentsRoom;
+	private Room studentsRoom = null;
 
 	public Student() {
 		loveList = new ArrayList<Student>();
@@ -32,7 +32,7 @@ public class Student implements Comparable<Student> {
 	public void addHate(Student hassPerson) {
 		hateList.add(hassPerson);
 	}
-	
+
 	// add a student to this student's loveList
 	public void addLove(Student liebesPerson) {
 		loveList.add(liebesPerson);
@@ -74,6 +74,13 @@ public class Student implements Comparable<Student> {
 		String otherName = otherStudent.getName();
 
 		return name.compareTo(otherName);
+	}
+
+	public boolean hates(Student otherStudent) {
+		for (Student temp : hateList)
+			if (otherStudent == temp)
+				return true;
+		return false;
 	}
 
 }
