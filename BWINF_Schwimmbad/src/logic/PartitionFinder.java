@@ -82,19 +82,52 @@ public class PartitionFinder {
 		return combos;
 	}
 
-	public static void testtest(ArrayList<int[]> partitions) {
+	public static ArrayList<int[]> testtest(ArrayList<int[]> partitions, int exchangeDigit) {
 		ArrayList<int[]> allPartitions = new ArrayList<int[]>();
 
 		for (int[] temp : partitions) {
 
-			int[] occurence = findRowOfDigit(temp, 1);
+			int[] occurence = findRowOfDigit(temp, exchangeDigit);
 
 			// no change needed
-			if (occurence[0] == -1)
+			if (occurence[0] == -1) {
 				allPartitions.add(temp);
+				continue;
+			}
+
+			int lengthOfOccurence = occurence[1] - occurence[0] + 1;
+
+			// get binary combinations
+			ArrayList<int[]> binaryCombinations = getBinaryCombinations(lengthOfOccurence, exchangeDigit);
+
+			// insert the combinations into the original partition
+			ArrayList<int[]> newPartitions = exchangeElementsWithSubset(temp, binaryCombinations, occurence[0]);
+
+			allPartitions.addAll(newPartitions);
 
 		}
 
+		return allPartitions;
+
+	}
+
+	public static ArrayList<int[]> exchangeElementsWithSubset(int[] partition, ArrayList<int[]> binaryCombinations,
+			int startIndex) {
+		ArrayList<int[]> newPartitions = new ArrayList<int[]>();
+
+		for (int i = 0; i < binaryCombinations.size(); i++) {
+
+			int[] newPartition = partition.clone();
+			int[] binaryCombo = binaryCombinations.get(i);
+
+			for (int j = 0; j < binaryCombo.length; j++)
+				newPartition[startIndex + j] = binaryCombo[j];
+
+			newPartitions.add(newPartition);
+
+		}
+
+		return newPartitions;
 	}
 
 	/*
@@ -125,16 +158,29 @@ public class PartitionFinder {
 			System.out.println(Arrays.toString(temp));
 	}
 
+	/*
+	 * 
+	 * methods to switch 1's and 4's working. 
+	 * next: implement ticketlist creator
+	 * 
+	 */
 	public static void main(String[] args) {
-		int n = 6;
+		int n = 12;
 
 		ArrayList<String> partitions = partition(n);
 		ArrayList<int[]> partitionArrays = convertToListOfArrays(partitions);
 
-		printList(partitionArrays);
-		System.out.println();
+		ArrayList<int[]> allPartitions = testtest(partitionArrays, 1);
+		allPartitions = testtest(allPartitions, 4);
 
-		ArrayList<int[]> test = getBinaryCombinations(4, 4);
-		printList(test);
+		printList(partitionArrays);
+
+		System.out.println("\nAll partitions\n");
+
+		printList(allPartitions);
+		/*
+		 * for (int[] temp : partitionArrays) { int[] occurences = findRowOfDigit(temp,
+		 * 4); System.out.println("Occurences: " + Arrays.toString(occurences)); }
+		 */
 	}
 }
