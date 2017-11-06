@@ -5,9 +5,15 @@ package logic.tickets;
  */
 public class TeenTicket extends Ticket {
 
-	public TeenTicket(){
+	public TeenTicket(boolean isWeekday) {
 		super();
-		super.setPrice(2.50);
+		if (isWeekday)
+			super.setPrice(2.50 * 0.9);
+		else
+			super.setPrice(2.50);
+
 		super.setName("Teen Ticket");
+		super.setTicketType(1);
+		super.setRequiredPeople(new int[] { 2 });
 	}
 }

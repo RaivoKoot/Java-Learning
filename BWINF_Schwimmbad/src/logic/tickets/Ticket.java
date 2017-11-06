@@ -1,12 +1,13 @@
 package logic.tickets;
 
-public class Ticket {
+public class Ticket implements Comparable<Ticket> {
 
 	private double price = -999.999;
-	private double weekdayPrice = -999.999;
-	private double activePrice = -999.999;
+	private int[] requiredPeopleTypes = null;
+	private int[] alternateRequiredPeopleTypes = null;
 
 	private String name = "NONAME";
+	private int ticketType = -1;
 
 	private boolean validOnWeekend = true;
 	private boolean validOnWeekdays = true;
@@ -17,12 +18,12 @@ public class Ticket {
 		return ticketInfo;
 	}
 
-	public void activateWeekdayPrice() {
-		setActivePrice(weekdayPrice);
+	public void setRequiredPeople(int[] peopleTypes) {
+		requiredPeopleTypes = peopleTypes;
 	}
 
-	public void activateWeekendPrice() {
-		setActivePrice(price);
+	public int[] getRequiredPeopleTypes() {
+		return requiredPeopleTypes;
 	}
 
 	public double getPrice() {
@@ -31,8 +32,6 @@ public class Ticket {
 
 	public void setPrice(double price) {
 		this.price = price;
-
-		this.setWeekdayPrice(price * 0.8);
 	}
 
 	public String getName() {
@@ -67,20 +66,30 @@ public class Ticket {
 		this.validOnWeekend = validOnWeekend;
 	}
 
-	public double getWeekdayPrice() {
-		return weekdayPrice;
+	public int[] getAlternateRequiredPeopleTypes() {
+		return alternateRequiredPeopleTypes;
 	}
 
-	public void setWeekdayPrice(double weekdayPrice) {
-		this.weekdayPrice = weekdayPrice;
+	public void setAlternateRequiredPeopleTypes(int[] alternateRequiredPeopleTypes) {
+		this.alternateRequiredPeopleTypes = alternateRequiredPeopleTypes;
 	}
 
-	public double getActivePrice() {
-		return activePrice;
+	public int getTicketType() {
+		return ticketType;
 	}
 
-	public void setActivePrice(double activePrice) {
-		this.activePrice = activePrice;
+	public void setTicketType(int ticketType) {
+		this.ticketType = ticketType;
 	}
 
+	@Override
+	public int compareTo(Ticket otherTicket) {
+
+		if (otherTicket.getTicketType() > this.ticketType)
+			return -1;
+		else if (otherTicket.getTicketType() < this.ticketType)
+			return 1;
+		else
+			return 0;
+	}
 }

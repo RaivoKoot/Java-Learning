@@ -5,12 +5,17 @@ import java.util.Arrays;
 
 public class PartitionFinder {
 
-	public static ArrayList<String> partition(int n) {
+	public static ArrayList<int[]> getAllPartitions(int n) {
 		ArrayList<String> partitions = new ArrayList<String>();
 
 		partition(n, 6, "", partitions);
 
-		return partitions;
+		ArrayList<int[]> partitionAsArrays = convertToListOfArrays(partitions);
+
+		ArrayList<int[]> allPartitions = expandPartitions(partitionAsArrays, 1);
+		allPartitions = expandPartitions(allPartitions, 4);
+
+		return allPartitions;
 	}
 
 	/*
@@ -58,9 +63,9 @@ public class PartitionFinder {
 	 * generates possible binary numbers for specific length and instead of 0's and
 	 * 1's a specific digit and -digit
 	 * 
-	 * input example: length 3, digit 1
+	 * input example: length 2, digit 1
 	 * 
-	 * output example: [1, 1, 1], [-1, 1, 1], [-1, -1, 1], [-1, -1, -1]
+	 * output example: [1, 1], [-1, 1], [-1, -1]
 	 */
 	public static ArrayList<int[]> getBinaryCombinations(int length, int digit) {
 
@@ -71,9 +76,9 @@ public class PartitionFinder {
 
 			for (int j = 0; j < length; j++) {
 				if (j < i)
-					newCombo[j] = digit;
-				else
 					newCombo[j] = -digit;
+				else
+					newCombo[j] = digit;
 			}
 
 			combos.add(newCombo);
@@ -82,75 +87,80 @@ public class PartitionFinder {
 		return combos;
 	}
 
-	public static ArrayList<int[]> testtest(ArrayList<int[]> partitions, int exchangeDigit) {
-		ArrayList<int[]> allPartitions = new ArrayList<int[]>();
+	/*
+	 * 
+	 * 
+	 */
+	public static ArrayList<int[]> expandPartitions(ArrayList<int[]> sets, int exchangeDigit) {
+		ArrayList<int[]> allSets = new ArrayList<int[]>();
 
-		for (int[] temp : partitions) {
+		for (int[] temp : sets) {
 
-			int[] occurence = findRowOfDigit(temp, exchangeDigit);
+			// indicates start and end of subset of digit
+			int[] subset = new int[2];
+			subset = findSubsetLocation(temp, exchangeDigit);
 
 			// no change needed
-			if (occurence[0] == -1) {
-				allPartitions.add(temp);
+			if (subset[0] == -1) {
+				allSets.add(temp);
 				continue;
 			}
 
-			int lengthOfOccurence = occurence[1] - occurence[0] + 1;
+			int subsetLength = subset[1] - subset[0] + 1;
 
-			// get binary combinations
-			ArrayList<int[]> binaryCombinations = getBinaryCombinations(lengthOfOccurence, exchangeDigit);
+			// get subset combinations
+			ArrayList<int[]> subsetCombinations = getBinaryCombinations(subsetLength, exchangeDigit);
 
-			// insert the combinations into the original partition
-			ArrayList<int[]> newPartitions = exchangeElementsWithSubset(temp, binaryCombinations, occurence[0]);
+			// insert the combinations into the original sets
+			ArrayList<int[]> newSets = exchangeSubset(temp, subsetCombinations, subset[0]);
 
-			allPartitions.addAll(newPartitions);
+			allSets.addAll(newSets);
 
 		}
 
-		return allPartitions;
+		return allSets;
 
 	}
 
-	public static ArrayList<int[]> exchangeElementsWithSubset(int[] partition, ArrayList<int[]> binaryCombinations,
-			int startIndex) {
-		ArrayList<int[]> newPartitions = new ArrayList<int[]>();
+	public static ArrayList<int[]> exchangeSubset(int[] set, ArrayList<int[]> subsets, int startIndex) {
+		ArrayList<int[]> newSets = new ArrayList<int[]>();
 
-		for (int i = 0; i < binaryCombinations.size(); i++) {
+		for (int i = 0; i < subsets.size(); i++) {
 
-			int[] newPartition = partition.clone();
-			int[] binaryCombo = binaryCombinations.get(i);
+			int[] newSet = set.clone();
+			int[] subset = subsets.get(i);
 
-			for (int j = 0; j < binaryCombo.length; j++)
-				newPartition[startIndex + j] = binaryCombo[j];
+			for (int j = 0; j < subset.length; j++)
+				newSet[startIndex + j] = subset[j];
 
-			newPartitions.add(newPartition);
+			newSets.add(newSet);
 
 		}
 
-		return newPartitions;
+		return newSets;
 	}
 
 	/*
 	 * finds the index of the first occurence of digit and the index of the last
 	 * occurence of digit
 	 */
-	public static int[] findRowOfDigit(int[] numbers, int digit) {
+	public static int[] findSubsetLocation(int[] set, int digit) {
 		// index 0 is first occurence of digit
 		// index 1 is last occurence of digit
-		int[] occurence = { -1, -1 };
+		int[] subset = { -1, -1 };
 
-		for (int i = 0; i < numbers.length; i++) {
-			if (numbers[i] != digit)
+		for (int i = 0; i < set.length; i++) {
+			if (set[i] != digit)
 				continue;
 
-			if (occurence[0] == -1)
-				occurence[0] = i;
+			if (subset[0] == -1)
+				subset[0] = i;
 
-			occurence[1] = i;
+			subset[1] = i;
 
 		}
 
-		return occurence;
+		return subset;
 	}
 
 	public static void printList(ArrayList<int[]> combos) {
@@ -160,24 +170,15 @@ public class PartitionFinder {
 
 	/*
 	 * 
-	 * methods to switch 1's and 4's working. 
-	 * next: implement ticketlist creator
+	 * methods to switch 1's and 4's working. next: implement ticketlist creator
 	 * 
 	 */
 	public static void main(String[] args) {
-		int n = 12;
+		int n = 8;
 
-		ArrayList<String> partitions = partition(n);
-		ArrayList<int[]> partitionArrays = convertToListOfArrays(partitions);
-
-		ArrayList<int[]> allPartitions = testtest(partitionArrays, 1);
-		allPartitions = testtest(allPartitions, 4);
-
+		ArrayList<int[]> partitionArrays = getAllPartitions(n);
+		
 		printList(partitionArrays);
-
-		System.out.println("\nAll partitions\n");
-
-		printList(allPartitions);
 		/*
 		 * for (int[] temp : partitionArrays) { int[] occurences = findRowOfDigit(temp,
 		 * 4); System.out.println("Occurences: " + Arrays.toString(occurences)); }

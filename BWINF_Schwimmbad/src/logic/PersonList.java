@@ -14,66 +14,51 @@ public class PersonList {
 		people.add(person);
 	}
 
-	public Person getPersonAtIndex(int index) {
-		return people.get(index);
+	public void removePerson(Person person) {
+		people.remove(person);
 	}
 
-	public int getAgeOfPersonAtIndex(int index) {
-		int age = getPersonAtIndex(index).getAge();
-		return age;
+	public Person getType2() {
+		Person person = getPersonByType(2);
+
+		return person;
 	}
 
-	public boolean removePerson(int minimumAge) {
-		for (Person temp : people)
-			if (temp.getAge() >= minimumAge) {
-				people.remove(temp);
-				return true;
-			}
-		return false;
+	public Person getType3() {
+		Person person = getPersonByType(3);
+
+		return person;
 	}
 
-	public boolean isAdultLeft() {
-		for (Person temp : people)
-			if (temp.getAge() >= 18)
-				return true;
-		return false;
+	private Person getPersonByType(int type) {
+		for (Person temp : people) {
+			if (temp.getPersonType() == type)
+				return temp;
+		}
+
+		return null;
 	}
 
-	public boolean isTeenLeft() {
-		for (Person temp : people)
-			if (temp.getAge() <= 16)
-				return true;
-		return false;
+	public void setPeoplesList(ArrayList<Person> people) {
+		this.people = people;
 	}
 
-	public boolean isAdolescentLeft() {
-		for (Person temp : people)
-			if (temp.getAge() == 17)
-				return true;
-		return false;
+	public PersonList clone() {
+		PersonList clonedPersonList = new PersonList();
+		clonedPersonList.setPeoplesList((ArrayList<Person>) people.clone());
+
+		return clonedPersonList;
 	}
 
-	public void removeAnAdult() {
-		for (Person temp : people)
-			if (temp.getAge() >= 18) {
-				people.remove(temp);
-				return;
-			}
+	public Person getAPerson() {
+		Person person = null;
+		if (people.size() != 0)
+			person = people.get(0);
+		return person;
 	}
 
-	public void removeATeen() {
-		for (Person temp : people)
-			if (temp.getAge() <= 16) {
-				people.remove(temp);
-				return;
-			}
-	}
-
-	public void removeAnAdolescent() {
-		for (Person temp : people)
-			if (temp.getAge() == 17) {
-				people.remove(temp);
-				return;
-			}
-	}
+	/*
+	 * public void removeAnAdolescent() { for (Person temp : people) if
+	 * (temp.getAge() == 17) { people.remove(temp); return; } }
+	 */
 }

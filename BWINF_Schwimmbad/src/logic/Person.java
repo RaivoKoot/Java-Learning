@@ -1,17 +1,23 @@
 package logic;
 
-import logic.tickets.Ticket;
-
 public class Person {
 
 	private int age;
-
-	private Ticket ticket;
-
-	private boolean hasStandardTicket;
+	private int personType;
 
 	public Person(int age) {
 		this.setAge(age);
+		setType(age);
+	}
+
+	private void setType(int age) {
+		if (age < 4)
+			setPersonType(1); // baby
+		else if (age < 17)
+			setPersonType(2); // teenager
+		else
+			setPersonType(3); // adult
+
 	}
 
 	public int getAge() {
@@ -22,19 +28,11 @@ public class Person {
 		this.age = age;
 	}
 
-	public Ticket getTicket() {
-		return ticket;
+	public int getPersonType() {
+		return personType;
 	}
 
-	public void setTicket(Ticket ticket) {
-		this.ticket = ticket;
-	}
-
-	public boolean isHasStandardTicket() {
-		return hasStandardTicket;
-	}
-
-	public void setHasStandardTicket(boolean hasStandardTicket) {
-		this.hasStandardTicket = hasStandardTicket;
+	public void setPersonType(int personType) {
+		this.personType = personType;
 	}
 }
