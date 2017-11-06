@@ -1,10 +1,10 @@
-package logic;
+package logic.DataEncapsulation;
 
 public class DateInfo {
 
-	static boolean isVacation = false;
-	static boolean isWeekend = false;
-	static boolean isWeekDay = false;
+	public static boolean isVacation = false;
+	public static boolean isWeekend = false;
+	public static boolean isWeekDay = false;
 
 	static void setIsWeekDay(boolean isWeekDay) {
 		DateInfo.isWeekDay = isWeekDay;

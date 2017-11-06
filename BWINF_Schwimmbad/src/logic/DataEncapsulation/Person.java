@@ -1,4 +1,4 @@
-package logic;
+package logic.DataEncapsulation;
 
 public class Person {
 

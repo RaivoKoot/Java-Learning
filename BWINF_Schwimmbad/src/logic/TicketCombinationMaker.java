@@ -3,6 +3,9 @@ package logic;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import logic.DataEncapsulation.DateInfo;
+import logic.DataEncapsulation.TicketList;
+
 public class TicketCombinationMaker {
 
 	/*

@@ -2,6 +2,9 @@ package logic;
 
 import java.util.ArrayList;
 
+import logic.DataEncapsulation.Person;
+import logic.DataEncapsulation.PersonList;
+import logic.DataEncapsulation.TicketList;
 import logic.tickets.Ticket;
 
 /*
@@ -16,35 +19,49 @@ public class TicketListValidator {
 		for (Ticket temp : tickets.getTickets()) {
 
 			int[] ticketPersonRequirements = temp.getRequiredPeopleTypes();
-			//int[] alternateTicketPersonRequirements = temp.getAlternateRequiredPeopleTypes();
+			int[] alternateTicketPersonRequirements = temp.getAlternateRequiredPeopleTypes();
 
 			// int[][] requiredPeopleLists = { ticketPersonRequirements,
 			// alternateTicketPersonRequirements };
 
-			int amountOfPeopleNeeded = ticketPersonRequirements.length;
+			int[] currentPersonRequirements = ticketPersonRequirements;
+			int amountOfPeopleNeeded = -1;
+			boolean firstRequirementNotMet = true;
 
 			PersonList tempPeople = people.clone();
-			
-			for (int i = 0; i < amountOfPeopleNeeded; i++) {
+			for (int j = 0; j < 2; j++) {
 
-				int typeOfPerson = ticketPersonRequirements[i];
-				Person personForTicket = null;
+				if (null == currentPersonRequirements)
+					break;
 
-				if (typeOfPerson == 2)
-					personForTicket = tempPeople.getType2();
-				else if (typeOfPerson == 3)
-					personForTicket = tempPeople.getType3();
-				else if (typeOfPerson == 4)
-					personForTicket = tempPeople.getAPerson();
+				amountOfPeopleNeeded = currentPersonRequirements.length;
+				for (int i = 0; i < amountOfPeopleNeeded; i++) {
 
-				if (null == personForTicket)
-					return false;
+					int typeOfPerson = currentPersonRequirements[i];
+					Person personForTicket = null;
 
-				tempPeople.removePerson(personForTicket);
+					if (typeOfPerson == 2)
+						personForTicket = tempPeople.getType2();
+					else if (typeOfPerson == 3)
+						personForTicket = tempPeople.getType3();
+					else if (typeOfPerson == 4)
+						personForTicket = tempPeople.getAPerson();
+
+					if (null == personForTicket) {
+						if (null == alternateTicketPersonRequirements || j == 1)
+							return false;
+
+						tempPeople = people.clone();
+						break;
+					}
+
+					tempPeople.removePerson(personForTicket);
+				} 
+				people = tempPeople;
+				
+				currentPersonRequirements = alternateTicketPersonRequirements;
+
 			}
-
-			people = tempPeople;
-
 		}
 
 		return true;
