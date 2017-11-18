@@ -1,6 +1,10 @@
 package logic.DataEncapsulation;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Locale;
 
 import logic.tickets.AdultTicket;
 import logic.tickets.FamilyTicket;
@@ -58,6 +62,10 @@ public class TicketList {
 
 		if (hasCoupon && !isVacation)
 			price = price * 0.9;
+
+		DecimalFormat twoPlaces = new DecimalFormat("0.00");
+		price = Double.parseDouble(twoPlaces.format(price).replaceAll(",", "."));
+
 
 		return price;
 	}
