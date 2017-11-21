@@ -1,7 +1,7 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public final class Rechnungen {
+public final class MathematischeRechnungen {
 
 	public static BigDecimal berechneSteigung(Punkt p1, Punkt p2) {
 		BigDecimal deltaY = p1.getY().subtract(p2.getY());

@@ -19,7 +19,7 @@ public class Gerade {
 		punkt_eins = p1;
 		punkt_zwei = p2;
 
-		steigung = Rechnungen.berechneSteigung(p1, p2);
+		steigung = MathematischeRechnungen.berechneSteigung(p1, p2);
 		ySchnittpunkt = berechneYSchnittpunk(p1);
 
 		/*
@@ -39,7 +39,7 @@ public class Gerade {
 
 		BigDecimal ySchnittpunkt;
 
-		ySchnittpunkt = Rechnungen.bringeAufEineSeite(gleichungLinkeSeite, gleichungRechteSeite);
+		ySchnittpunkt = MathematischeRechnungen.bringeAufEineSeite(gleichungLinkeSeite, gleichungRechteSeite);
 
 		return ySchnittpunkt;
 	}
@@ -60,8 +60,8 @@ public class Gerade {
 
 	public boolean liegtPunktAufStrecke(Punkt p1) {
 
-		BigDecimal t = Rechnungen.punktProbe(geradenGleichungVektorForm, p1);
-		boolean ergebnis = Rechnungen.liegtPunktAufStrecke(t);
+		BigDecimal t = MathematischeRechnungen.punktProbe(geradenGleichungVektorForm, p1);
+		boolean ergebnis = MathematischeRechnungen.liegtPunktAufStrecke(t);
 
 		return ergebnis;
 	}

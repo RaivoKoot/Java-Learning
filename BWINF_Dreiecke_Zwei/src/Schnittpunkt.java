@@ -27,4 +27,13 @@ public class Schnittpunkt extends Punkt {
 		this.mutterGerade_zwei = mutterGerade_zwei;
 	}
 
+	public boolean istSchnittPunktAufStrecken() {
+		boolean ergebnis1 = mutterGerade_eins.liegtPunktAufStrecke(this);
+		boolean ergebnis2 = mutterGerade_zwei.liegtPunktAufStrecke(this);
+
+		if (ergebnis1 == true && ergebnis2 == true)
+			return true;
+		return false;
+	}
+
 }
