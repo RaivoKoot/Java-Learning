@@ -75,22 +75,27 @@ public final class MathematischeRechnungen {
 
 			x = knownVariable;
 		}
-
-		BigDecimal y = getYOfX(x, einsetzungGerade);
-
-		if (g1.isHorizontalStrecke() || g2.isHorizontalStrecke())
+		BigDecimal y;
+		if (g1.isHorizontalStrecke() || g2.isHorizontalStrecke()) {
+			y = getYOfX(x, einsetzungGerade, false);
 			return new Schnittpunkt(y.setScale(5, BigDecimal.ROUND_DOWN), x.setScale(5, BigDecimal.ROUND_DOWN), g1, g2);
+		} else
+			y = getYOfX(x, einsetzungGerade, true);
 
 		return new Schnittpunkt(x.setScale(5, BigDecimal.ROUND_DOWN), y.setScale(5, BigDecimal.ROUND_DOWN), g1, g2);
 	}
 
-	public static BigDecimal getYOfX(BigDecimal x, Gerade g1) {
+	public static BigDecimal getYOfX(BigDecimal x, Gerade g1, boolean findingX) {
 		BigDecimal y;
 
 		if (g1.isAFunction()) {
-			y = x.multiply(g1.getSteigung());
-			y = y.add(g1.getYSchnittpunkt());
-
+			if (findingX) {
+				y = x.multiply(g1.getSteigung());
+				y = y.add(g1.getYSchnittpunkt());
+			} else {
+				y = x.subtract(g1.getYSchnittpunkt());
+				y = y.divide(g1.getSteigung());
+			}
 		} else if (g1.isHorizontalStrecke())
 			y = g1.getPunkt_Eins().getX();
 		else
@@ -181,9 +186,9 @@ public final class MathematischeRechnungen {
 		BigDecimal t1 = loeseGleichung(gleichung1);
 		BigDecimal t2 = loeseGleichung(gleichung2);
 
-		System.out.println("t1: "+t1);
-		System.out.println("t2: "+t2);
-		
+		System.out.println("t1: " + t1);
+		System.out.println("t2: " + t2);
+
 		if (t1.compareTo(t2) == 0)
 			return t1;
 
