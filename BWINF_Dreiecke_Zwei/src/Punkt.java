@@ -2,8 +2,8 @@ import java.math.BigDecimal;
 
 public class Punkt {
 
-	BigDecimal x;
-	BigDecimal y;
+	private BigDecimal x;
+	private BigDecimal y;
 
 	public Punkt(BigDecimal x, BigDecimal y) {
 		this.x = x;

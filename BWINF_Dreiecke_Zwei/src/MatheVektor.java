@@ -27,7 +27,7 @@ public class MatheVektor {
 	}
 
 	public String toString() {
-		String string = "vektor:\n" + x + "\n" + y;
+		String string = "(" + x + "_" + y+")";
 		return string;
 	}
 }

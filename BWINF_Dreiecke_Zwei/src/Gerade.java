@@ -7,19 +7,37 @@ public class Gerade {
 
 	private GeradenGleichung geradenGleichungVektorForm;
 
-	private BigDecimal steigung;
 	private BigDecimal ySchnittpunkt;
+	private BigDecimal steigung;
+	private boolean vertikalStrecke;
+	private boolean horizontalStrecke;
+
+	public boolean isAFunction() {
+		if (vertikalStrecke == false && horizontalStrecke == false)
+			return true;
+		return false;
+	}
 
 	public Gerade(BigDecimal steigung, BigDecimal b) {
 		this.steigung = steigung;
 		this.ySchnittpunkt = b;
+		setVertikalStrecke(false);
+		setHorizontalStrecke(false);
 	}
 
 	public Gerade(Punkt p1, Punkt p2) {
 		punkt_eins = p1;
 		punkt_zwei = p2;
+		setVertikalStrecke(false);
+		setHorizontalStrecke(false);
 
 		steigung = MathematischeRechnungen.berechneSteigung(p1, p2);
+
+		if (steigung.compareTo(new BigDecimal("999999")) == 0)
+			setHorizontalStrecke(true);
+		else if (steigung.compareTo(new BigDecimal("0")) == 0)
+			setVertikalStrecke(true);
+
 		ySchnittpunkt = berechneYSchnittpunk(p1);
 
 		/*
@@ -47,6 +65,7 @@ public class Gerade {
 	public String toString() {
 		String geradenGleichung = "f(x)= ";
 		geradenGleichung += steigung + "x + " + ySchnittpunkt;
+		geradenGleichung += "\n" + punkt_eins.toString() + " " + punkt_zwei.toString();
 		return geradenGleichung;
 	}
 
@@ -72,6 +91,30 @@ public class Gerade {
 
 	public void setGeradenGleichungVektorForm(GeradenGleichung geradenGleichungVektorForm) {
 		this.geradenGleichungVektorForm = geradenGleichungVektorForm;
+	}
+
+	public boolean isVertikalStrecke() {
+		return vertikalStrecke;
+	}
+
+	public void setVertikalStrecke(boolean vertikalStrecke) {
+		this.vertikalStrecke = vertikalStrecke;
+	}
+
+	public boolean isHorizontalStrecke() {
+		return horizontalStrecke;
+	}
+
+	public void setHorizontalStrecke(boolean horizontalStrecke) {
+		this.horizontalStrecke = horizontalStrecke;
+	}
+	
+	public Punkt getPunkt_Eins() {
+		return punkt_eins;
+	}
+	
+	public Punkt getPunkt_Zwei() {
+		return punkt_zwei;
 	}
 
 }

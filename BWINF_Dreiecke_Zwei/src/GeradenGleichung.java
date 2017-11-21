@@ -20,4 +20,9 @@ public class GeradenGleichung {
 		this.ortsVektor = ortsVektor;
 	}
 
+	public String toString() {
+		String string = ortsVektor.toString() + "+r" + richtungsVektor.toString();
+		return string;
+	}
+
 }
