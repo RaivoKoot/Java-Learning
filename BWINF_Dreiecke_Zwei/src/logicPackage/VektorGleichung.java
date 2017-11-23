@@ -1,3 +1,5 @@
+package logicPackage;
+import logicPackage.dataPackage.MatheVektor;
 
 public class VektorGleichung {
 	private MatheVektor richtungsVektorR;

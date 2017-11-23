@@ -1,3 +1,5 @@
+package ignore;
+import logicPackage.dataPackage.Schnittpunkt;
 
 public class Dreieck {
 

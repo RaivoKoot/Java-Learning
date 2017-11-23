@@ -1,8 +1,11 @@
+package logicPackage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
+
+import logicPackage.dataPackage.Fraction;
+import logicPackage.dataPackage.Punkt;
 
 public class TextFileExtractor {
 
@@ -55,11 +58,11 @@ public class TextFileExtractor {
 
 	public static Gerade dissectLine(String line) {
 		String xyCoordinates[] = line.split(" "); // turn String into List\
-
-		BigDecimal x1 = new BigDecimal(xyCoordinates[0]);
-		BigDecimal y1 = new BigDecimal(xyCoordinates[1]);
-		BigDecimal x2 = new BigDecimal(xyCoordinates[2]);
-		BigDecimal y2 = new BigDecimal(xyCoordinates[3]);
+		
+		Fraction x1 = new Fraction((int)Double.parseDouble(xyCoordinates[0]));
+		Fraction y1 = new Fraction((int)Double.parseDouble(xyCoordinates[1]));
+		Fraction x2 = new Fraction((int)Double.parseDouble(xyCoordinates[2]));
+		Fraction y2 = new Fraction((int)Double.parseDouble(xyCoordinates[3]));
 
 		Punkt p1 = new Punkt(x1, y1);
 		Punkt p2 = new Punkt(x2, y2);

@@ -1,11 +1,13 @@
-import java.math.BigDecimal;
+package logicPackage.dataPackage;
+
+import logicPackage.Gerade;
 
 public class Schnittpunkt extends Punkt {
 
 	private Gerade mutterGerade_eins;
 	private Gerade mutterGerade_zwei;
 
-	public Schnittpunkt(BigDecimal x, BigDecimal y, Gerade g1, Gerade g2) {
+	public Schnittpunkt(Fraction x, Fraction y, Gerade g1, Gerade g2) {
 		super(x, y);
 		setMutterGerade_eins(g1);
 		setMutterGerade_zwei(g2);

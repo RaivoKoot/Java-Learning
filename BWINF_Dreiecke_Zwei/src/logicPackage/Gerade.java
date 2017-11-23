@@ -1,4 +1,8 @@
-import java.math.BigDecimal;
+package logicPackage;
+
+import logicPackage.dataPackage.Fraction;
+import logicPackage.dataPackage.MatheVektor;
+import logicPackage.dataPackage.Punkt;
 
 public class Gerade {
 
@@ -7,43 +11,39 @@ public class Gerade {
 
 	private GeradenGleichung geradenGleichungVektorForm;
 
-	private BigDecimal ySchnittpunkt;
-	private BigDecimal steigung;
+	private Fraction ySchnittpunkt;
+	private Fraction steigung;
 	private boolean vertikalStrecke;
-	private boolean horizontalStrecke;
 
 	public boolean isAFunction() {
-		if (vertikalStrecke == false && horizontalStrecke == false)
+		if (vertikalStrecke == false)
 			return true;
 		return false;
 	}
 
-	public Gerade(BigDecimal steigung, BigDecimal b) {
+	public Gerade(Fraction steigung, Fraction b) {
 		this.steigung = steigung;
 		this.ySchnittpunkt = b;
 		setVertikalStrecke(false);
-		setHorizontalStrecke(false);
 	}
 
 	public Gerade(Punkt p1, Punkt p2) {
 		punkt_eins = p1;
 		punkt_zwei = p2;
 		setVertikalStrecke(false);
-		setHorizontalStrecke(false);
 
 		steigung = MathematischeRechnungen.berechneSteigung(p1, p2);
 
-		if (steigung.compareTo(new BigDecimal("999999")) == 0)
-			setHorizontalStrecke(true);
-		else if (steigung.compareTo(new BigDecimal("0")) == 0)
+		if (steigung.compareTo(new Fraction(999)) == 0)
 			setVertikalStrecke(true);
+			
 
 		ySchnittpunkt = berechneYSchnittpunk(p1);
 
 		/*
 		 * Geradengleichung in vektorieller parameterform herleiten
 		 */
-		MatheVektor ortsVektor = new MatheVektor(new BigDecimal("0"), new BigDecimal("0"), p1.getX(), p1.getY());
+		MatheVektor ortsVektor = new MatheVektor(new Fraction(0), new Fraction(0), p1.getX(), p1.getY());
 		MatheVektor richtungsVektor = new MatheVektor(p1.getX(), p1.getY(), p2.getX(), p2.getY());
 
 		geradenGleichungVektorForm = new GeradenGleichung();
@@ -51,11 +51,11 @@ public class Gerade {
 		geradenGleichungVektorForm.setRichtungsVektor(richtungsVektor);
 	}
 
-	public BigDecimal berechneYSchnittpunk(Punkt p1) {
-		BigDecimal gleichungRechteSeite = steigung.multiply(p1.getX());
-		BigDecimal gleichungLinkeSeite = p1.getY();
+	public Fraction berechneYSchnittpunk(Punkt p1) {
+		Fraction gleichungRechteSeite = steigung.multiply(p1.getX());
+		Fraction gleichungLinkeSeite = p1.getY();
 
-		BigDecimal ySchnittpunkt;
+		Fraction ySchnittpunkt;
 
 		ySchnittpunkt = MathematischeRechnungen.bringeAufEineSeite(gleichungLinkeSeite, gleichungRechteSeite);
 
@@ -69,17 +69,17 @@ public class Gerade {
 		return geradenGleichung;
 	}
 
-	public BigDecimal getSteigung() {
+	public Fraction getSteigung() {
 		return steigung;
 	}
 
-	public BigDecimal getYSchnittpunkt() {
+	public Fraction getYSchnittpunkt() {
 		return ySchnittpunkt;
 	}
 
 	public boolean liegtPunktAufStrecke(Punkt p1) {
 
-		BigDecimal t = MathematischeRechnungen.punktProbe(geradenGleichungVektorForm, p1);
+		Fraction t = MathematischeRechnungen.punktProbe(geradenGleichungVektorForm, p1);
 		boolean ergebnis = MathematischeRechnungen.liegtPunktAufStrecke(t);
 
 		return ergebnis;
@@ -101,18 +101,11 @@ public class Gerade {
 		this.vertikalStrecke = vertikalStrecke;
 	}
 
-	public boolean isHorizontalStrecke() {
-		return horizontalStrecke;
-	}
 
-	public void setHorizontalStrecke(boolean horizontalStrecke) {
-		this.horizontalStrecke = horizontalStrecke;
-	}
-	
 	public Punkt getPunkt_Eins() {
 		return punkt_eins;
 	}
-	
+
 	public Punkt getPunkt_Zwei() {
 		return punkt_zwei;
 	}
