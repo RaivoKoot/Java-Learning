@@ -1,56 +1,59 @@
 package logicPackage;
-import java.math.BigDecimal;
+
 import java.util.ArrayList;
 
-import ignore.Dreieck;
+import logicPackage.dataPackage.Dreieck;
 import logicPackage.dataPackage.Schnittpunkt;
 
 public class Main {
 
+	static final String FILE_NAME = "dreiecke1.txt";
+
 	public static void main(String[] args) {
-		/*
-		 * Punkt p1 = new Punkt(new BigDecimal("-3"), new BigDecimal("2.34")); Punkt p2
-		 * = new Punkt(new BigDecimal("4"), new BigDecimal("-3.12"));
-		 * 
-		 * Gerade g1 = new Gerade(p1, p2);
-		 * 
-		 * Punkt p3 = new Punkt(new BigDecimal("-4"), new BigDecimal("-10.4")); Punkt p4
-		 * = new Punkt(new BigDecimal("-1"), new BigDecimal("-2.6"));
-		 * 
-		 * Gerade g2 = new Gerade(p3, p4);
-		 * 
-		 * System.out.println(g1.toString()); System.out.println(g2.toString());
-		 * 
-		 * Schnittpunkt schnittpunkt =
-		 * MathematischeRechnungen.berechneGeradenSchnittpunk(g1, g2); if (schnittpunkt
-		 * == null) System.out.println("Kein Schnittpunk"); else
-		 * System.out.println(schnittpunkt.toString());
-		 * 
-		 * System.out.println(g1.liegtPunktAufStrecke(schnittpunkt));
-		 * System.out.println(g2.liegtPunktAufStrecke(schnittpunkt));
-		 * 
-		 * System.out.println("Ergebnis: " + schnittpunkt.istSchnittPunktAufStrecken());
-		 * 
-		 * int[] superset = { 1, 2, 3 };
-		 * 
-		 */
-		Gerade[] geraden = TextFileExtractor.extractLines("dreiecke4.txt");
+
+		Gerade[] geraden = extractLines(FILE_NAME);
+
+		ArrayList<Schnittpunkt> schnittpunkte = getValidIntersects(geraden);
+		System.out.println("Schnittpunkte: " + schnittpunkte.size());
+
+		ArrayList<Dreieck> dreiecke = getSubsetsOfThree(schnittpunkte);
+		System.out.println(dreiecke.size());
+
+		ArrayList<Dreieck> validDreiecke = getValidDreiecke(dreiecke);
+
+		System.out.println("\n\n" + validDreiecke.size());
+
+		// ExportTriangles.writeToFile();
+
+		String outputString = ExportTriangles.createOutputString(validDreiecke);
+		
+		System.out.println(outputString);
+		
+		ExportTriangles.writeToFile(outputString);
+	}
+
+	public static Gerade[] extractLines(String fileName) {
+		Gerade[] geraden = TextFileExtractor.extractLines(fileName);
 		for (int i = 0; i < geraden.length; i++) {
 			System.out.println("\nGerade Number " + (i + 1) + ": " + geraden[i].toString());
 			System.out.println(geraden[i].getGeradenGleichungVektorForm().toString());
 
 		}
 
+		return geraden;
+	}
+
+	public static ArrayList<Schnittpunkt> getValidIntersects(Gerade[] lines) {
 		ArrayList<Schnittpunkt> schnittpunkte = new ArrayList<Schnittpunkt>();
 
 		int counter = 0;
 		System.out.println("\n\n\n");
-		int listLength = geraden.length;
-		for (int i = 0; i < geraden.length; i++) {
-			for (int j = i + 1; j < geraden.length; j++) {
+		int listLength = lines.length;
+		for (int i = 0; i < lines.length; i++) {
+			for (int j = i + 1; j < lines.length; j++) {
 				counter++;
-				Gerade g1 = geraden[i];
-				Gerade g2 = geraden[j];
+				Gerade g1 = lines[i];
+				Gerade g2 = lines[j];
 				Schnittpunkt sp = MathematischeRechnungen.berechneGeradenSchnittpunk(g1, g2);
 				if (sp != null) {
 					// System.out.println(sp.getMutterGerade_eins().toString());
@@ -70,27 +73,51 @@ public class Main {
 
 		for (Schnittpunkt sp : schnittpunkte)
 			System.out.println(sp.toString());
+
+		return schnittpunkte;
 	}
 
-	public static ArrayList<Dreieck> getSubsetsSizeThree(ArrayList<Schnittpunkt> schnittpunkte) {
+	public static ArrayList<Dreieck> getSubsetsOfThree(ArrayList<Schnittpunkt> schnittpunkte) {
 		int listLength = schnittpunkte.size();
 		ArrayList<Dreieck> dreiecke = new ArrayList<Dreieck>();
 
 		for (int i = 0; i < listLength; i++)
-			for (int j = i; j < listLength; j++)
-				for (int k = j; k < listLength; k++) {
+			for (int j = i + 1; j < listLength; j++)
+				for (int k = j + 1; k < listLength; k++) {
 					Dreieck dreieck = new Dreieck();
 					dreieck.setPunkte(schnittpunkte.get(i), schnittpunkte.get(j), schnittpunkte.get(k));
 					dreiecke.add(dreieck);
 				}
 
 		return dreiecke;
-
 	}
 
-	/*
-	 * FEHLER BEI DER SCHNITTPUNKTBERECHNUNG DER HORIZONTALEN GERADE PROBLEME BEI
-	 * DER PUNKTPROBE
-	 */
+	public static ArrayList<Dreieck> getValidDreiecke(ArrayList<Dreieck> dreiecke) {
+		ArrayList<Dreieck> validDreiecke = new ArrayList<Dreieck>();
+
+		int threes = 0;
+
+		for (Dreieck temp : dreiecke) {
+			Schnittpunkt[] eckPunkte = temp.getEckPunkte();
+			ArrayList<Gerade> dreiecksSeiten = new ArrayList<Gerade>();
+
+			for (int i = 0; i < 3; i++) {
+				Gerade mutterGeradeEins = eckPunkte[i].getMutterGerade_eins();
+				Gerade mutterGeradeZwei = eckPunkte[i].getMutterGerade_zwei();
+
+				if (!dreiecksSeiten.contains(mutterGeradeEins))
+					dreiecksSeiten.add(mutterGeradeEins);
+				if (!dreiecksSeiten.contains(mutterGeradeZwei))
+					dreiecksSeiten.add(mutterGeradeZwei);
+
+			}
+
+			if (dreiecksSeiten.size() == 3) {
+				threes++;
+				validDreiecke.add(temp);
+			}
+		}
+		return validDreiecke;
+	}
 
 }

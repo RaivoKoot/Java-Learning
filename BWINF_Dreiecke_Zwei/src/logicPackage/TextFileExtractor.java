@@ -1,4 +1,5 @@
 package logicPackage;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -58,20 +59,29 @@ public class TextFileExtractor {
 
 	public static Gerade dissectLine(String line) {
 		String xyCoordinates[] = line.split(" "); // turn String into List\
-		
-		Fraction x1 = new Fraction((int)Double.parseDouble(xyCoordinates[0]));
-		Fraction y1 = new Fraction((int)Double.parseDouble(xyCoordinates[1]));
-		Fraction x2 = new Fraction((int)Double.parseDouble(xyCoordinates[2]));
-		Fraction y2 = new Fraction((int)Double.parseDouble(xyCoordinates[3]));
+
+		Fraction x1 = new Fraction((int) Double.parseDouble(xyCoordinates[0]));
+		Fraction y1 = new Fraction((int) Double.parseDouble(xyCoordinates[1]));
+		Fraction x2 = new Fraction((int) Double.parseDouble(xyCoordinates[2]));
+		Fraction y2 = new Fraction((int) Double.parseDouble(xyCoordinates[3]));
 
 		Punkt p1 = new Punkt(x1, y1);
 		Punkt p2 = new Punkt(x2, y2);
-		
-		System.out.println(p1.toString()+p2.toString());
+		syso(p1, p2);
+
 
 		Gerade gerade = new Gerade(p1, p2);
 		return gerade;
 
+	}
+
+	private static void syso(Punkt p1, Punkt p2) {
+		// TODO Auto-generated method stub
+		String string1 = "Point({" + p1.getX().getNumerator() + "," + p1.getY().getNumerator() + "})";
+		String string2 = "Point({" + p2.getX().getNumerator() + "," + p2.getY().getNumerator() + "})";
+		
+		String string = "Segment("+string1+","+string2+")";
+		System.out.println(string);
 	}
 
 }

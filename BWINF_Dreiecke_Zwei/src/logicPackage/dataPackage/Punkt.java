@@ -19,7 +19,6 @@ public class Punkt {
 	}
 
 	public String toString() {
-		String string = "(" + x + "|" + y + ")";
 
 		double xNummer;
 		double yNummer;
@@ -27,16 +26,26 @@ public class Punkt {
 		if (x.getDenominator() == 0)
 			xNummer = 0;
 		else
-			xNummer = x.getNumerator() / x.getDenominator();
+			xNummer = (double)x.getNumerator() / (double)x.getDenominator();
 		if (y.getDenominator() == 0)
 			yNummer = 0;
 		else
-			yNummer = y.getNumerator() / y.getDenominator();
+			yNummer = (double)y.getNumerator() / (double)y.getDenominator();
 
-		String string2 = "     (" + xNummer + "|" + yNummer + ")";
-
-		string += string2;
+		String yString = String.format("%1$,.2f", yNummer);
+		String xString =  String.format("%1$,.2f", xNummer);
+		
+		String string = "(" + xString + "|" + yString + ")";
+		
+		string += "\t(" + x + "|" + y + ")";
 
 		return string;
+	}
+
+	public boolean equals(Punkt p) {
+		if (x.equals(p.getX()) && y.equals(p.getY()))
+			return true;
+		
+		return false;
 	}
 }

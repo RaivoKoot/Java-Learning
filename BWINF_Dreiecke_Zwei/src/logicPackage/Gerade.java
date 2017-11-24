@@ -109,5 +109,13 @@ public class Gerade {
 	public Punkt getPunkt_Zwei() {
 		return punkt_zwei;
 	}
+	
+	public boolean equals(Gerade g) {
+		
+		if(punkt_eins == g.getPunkt_Eins() && punkt_zwei == g.getPunkt_Zwei())
+			return true;
+		
+		return false;
+	}
 
 }

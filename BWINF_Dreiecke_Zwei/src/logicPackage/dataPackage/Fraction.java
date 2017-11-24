@@ -185,7 +185,6 @@ public class Fraction implements Comparable<Fraction> {
 		return 0;
 	}
 
-
 	@Override
 	public int compareTo(Fraction otherFraction) {
 		if (denominator == 0)
@@ -198,5 +197,11 @@ public class Fraction implements Comparable<Fraction> {
 		Fraction fr2 = scaledFractions[1];
 
 		return Integer.compare(fr1.numerator, fr2.getNumerator());
+	}
+
+	public boolean equals(Fraction fr) {
+		if (numerator == fr.getNumerator() && denominator == fr.getDenominator())
+			return true;
+		return false;
 	}
 }
