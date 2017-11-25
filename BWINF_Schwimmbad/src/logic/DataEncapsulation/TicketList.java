@@ -16,7 +16,11 @@ public class TicketList {
 	private ArrayList<Ticket> tickets;
 	private boolean hasCoupon;
 
-	public TicketList(int[] ticketsAsNumbers, boolean hasCoupon) {
+	private int couponsUsedToSkipStudent;
+
+	public TicketList(int[] ticketsAsNumbers, boolean hasCoupon, int couponsUsedToSkipStudent) {
+		setCouponsUsedToSkipStudent(couponsUsedToSkipStudent);
+
 		this.tickets = new ArrayList<Ticket>();
 		this.hasCoupon = hasCoupon;
 
@@ -66,12 +70,25 @@ public class TicketList {
 		DecimalFormat twoPlaces = new DecimalFormat("0.00");
 		price = Double.parseDouble(twoPlaces.format(price).replaceAll(",", "."));
 
-
 		return price;
+	}
+
+	public boolean usesCouponForTenPercent(boolean isVacation) {
+		if (hasCoupon && !isVacation)
+			return true;
+		return false;
 	}
 
 	public ArrayList<Ticket> getTickets() {
 		return tickets;
+	}
+
+	public int getCouponsUsedToSkipStudent() {
+		return couponsUsedToSkipStudent;
+	}
+
+	public void setCouponsUsedToSkipStudent(int couponsUsedToSkipStudent) {
+		this.couponsUsedToSkipStudent = couponsUsedToSkipStudent;
 	}
 
 }

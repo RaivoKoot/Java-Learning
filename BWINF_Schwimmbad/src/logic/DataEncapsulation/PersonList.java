@@ -10,6 +10,10 @@ public class PersonList {
 		people = new ArrayList<Person>();
 	}
 
+	public int getGroupSize() {
+		return people.size();
+	}
+
 	public void addPerson(Person person) {
 		people.add(person);
 	}

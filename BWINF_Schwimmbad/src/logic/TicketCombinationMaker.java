@@ -26,7 +26,7 @@ public class TicketCombinationMaker {
 				boolean hasCouponLeft = false;
 				if (couponsLeft > 0)
 					hasCouponLeft = true;
-				TicketList newTicketList = new TicketList(temp, hasCouponLeft);
+				TicketList newTicketList = new TicketList(temp, hasCouponLeft, (coupons - couponsLeft));
 				ticketLists.add(newTicketList);
 			}
 

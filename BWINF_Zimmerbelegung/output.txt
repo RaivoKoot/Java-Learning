@@ -1,2 +1,32 @@
-Number of Rooms: 0
+Number of Rooms: 5
 
+
+*********************************************
+		Room 1
+2 students
+Celina, Annika, 
+*********************************************
+
+*********************************************
+		Room 2
+11 students
+Sophie, Hannah, Sarah, Vanessa, Jana, Johanna, Melina, Emily, Larissa, Lilli, Celine, 
+*********************************************
+
+*********************************************
+		Room 3
+3 students
+Merle, Jasmin, Sofia, 
+*********************************************
+
+*********************************************
+		Room 4
+2 students
+Michelle, Lea, 
+*********************************************
+
+*********************************************
+		Room 5
+25 students
+Carolin, Anna, Clara, Lena, Nina, Antonia, Lisa, Pia, Luisa, Lara, Laura, Julia, Marie, Lina, Katharina, Leonie, Kim, Nele, Pauline, Josephine, Miriam, Emma, Charlotte, Jessika, Alina, 
+*********************************************

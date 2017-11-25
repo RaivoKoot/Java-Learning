@@ -10,7 +10,7 @@ public class Testklasse {
 
 	public static void main(String[] args) {
 
-		PullFromInputFile.collectData("zimmerbelegungTest.txt");
+		PullFromInputFile.collectData("zimmerbelegung6.txt");
 		// DataStorage.printStudents();
 
 		ArrayList<Student> students = DataStorage.getStudents();
@@ -18,7 +18,7 @@ public class Testklasse {
 		ArrayList<Room> roomConstellation = RoomCreator.createRoomConstellation(students);
 
 		String outputString = ExportRooms.createOutputString(roomConstellation);
-		System.out.println(outputString);
+	//	System.out.println(outputString);
 		
 		ExportRooms.writeToFile(outputString);
 	

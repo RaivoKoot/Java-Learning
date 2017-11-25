@@ -106,7 +106,7 @@ public class RoomCreator {
 
 			boolean noRoomYet = true;
 			for (Room tempRoom : roomsWithoutLoves) {
-				if (noRoomYet && tempRoom.isCompatibleWithStudent(temp)) {
+				if (noRoomYet && tempRoom.getOccupants().size() < 6 && tempRoom.isCompatibleWithStudent(temp)) {
 					tempRoom.addStudent(temp, true);
 					noRoomYet = false;
 				}
