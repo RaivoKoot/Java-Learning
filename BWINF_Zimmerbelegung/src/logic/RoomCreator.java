@@ -16,7 +16,7 @@ public class RoomCreator {
 			for (Student currentLove : loveList) {
 
 				if (currentLove.hates(currentStudent)) {
-					System.out.println("currentLove hates student");
+					// System.out.println("currentLove hates student");
 					return failure;
 				}
 
@@ -28,23 +28,24 @@ public class RoomCreator {
 					// student does not have room either
 					if (null == currentStudent.getRoom()) {
 						createNewRoom(currentLove, currentStudent);
-						System.out.println("\n\nstudent " + currentStudent.getName() + " and love "
-								+ currentLove.getName() + " do not have a room yet. created new room with both");
+						// System.out.println("\n\nstudent " + currentStudent.getName() + " and love "
+						// + currentLove.getName() + " do not have a room yet. created new room with
+						// both");
 					}
 
 					// student has a room already
 					else {
 						// if student's room does not want love
-						if (currentStudent.getRoom().doesRoomHateStudent(currentLove)) {
-							System.out.println("\n\nstudents room does not want love");
+						if (!currentStudent.getRoom().isCompatibleWithStudent(currentLove)) {
+							// System.out.println("\n\nstudents room does not want love");
 							return failure;
 						}
 						// else add love to student's room
 						currentStudent.getRoom().addStudent(currentLove, true);
-						System.out.println("\n\nadded love " + currentLove.getName() + " to student "
-								+ currentStudent.getName() + "'s room. Her room contains:");
-						for (Student temp3 : currentStudent.getRoom().getOccupants())
-							System.out.print(temp3.getName() + ", ");
+						// System.out.println("\n\nadded love " + currentLove.getName() + " to student "
+						// + currentStudent.getName() + "'s room. Her room contains:");
+						// for (Student temp3 : currentStudent.getRoom().getOccupants())
+						// System.out.print(temp3.getName() + ", ");
 					}
 
 				}
@@ -55,8 +56,8 @@ public class RoomCreator {
 					// student has no room
 					if (null == currentStudent.getRoom()) {
 						// love's room does not want student
-						if (currentLove.getRoom().doesRoomHateStudent(currentStudent)) {
-							System.out.println("love's room does not want student");
+						if (!currentLove.getRoom().isCompatibleWithStudent(currentStudent)) {
+							// System.out.println("love's room does not want student");
 							return failure;
 						}
 						// else add student to love's room
@@ -66,10 +67,10 @@ public class RoomCreator {
 					else {
 						// rooms are not compatible
 						if (!studentsRoomsAreCompatible(currentLove, currentStudent)) {
-							ListPrinter.printRoomList(roomList);
-							System.out.println("Student: " + currentStudent.getName());
-							System.out.println("Love: " + currentLove.getName());
-							System.out.println("room of love and student are not compatible");
+							// ListPrinter.printRoomList(roomList);
+							// System.out.println("Student: " + currentStudent.getName());
+							// System.out.println("Love: " + currentLove.getName());
+							// System.out.println("room of love and student are not compatible");
 							return failure;
 						}
 
@@ -77,25 +78,48 @@ public class RoomCreator {
 
 							// rooms are compatible
 							// merge the two's rooms and remove the old rooms
-							System.out.println("\n\nMERGING ROOMS");
-							System.out.print("ROOM 1 CONTAINS: ");
-							for (Student temp3 : currentStudent.getRoom().getOccupants())
-								System.out.print(temp3.getName() + ", ");
-							System.out.print("\nROOM 2 CONTAINS: ");
-							for (Student temp3 : currentLove.getRoom().getOccupants())
-								System.out.print(temp3.getName() + ", ");
+							// System.out.println("\n\nMERGING ROOMS");
+							// System.out.print("ROOM 1 CONTAINS: ");
+							// for (Student temp3 : currentStudent.getRoom().getOccupants())
+							// System.out.print(temp3.getName() + ", ");
+							// System.out.print("\nROOM 2 CONTAINS: ");
+							// for (Student temp3 : currentLove.getRoom().getOccupants())
+							// System.out.print(temp3.getName() + ", ");
 							removeStudentsRoomsFromList(currentLove, currentStudent);
 							Room mergedRoom = mergeStudentsRooms(currentLove, currentStudent);
 							addRoom(mergedRoom);
 
-							System.out.println("\nNEW ROOM CONTAINS: ");
-							for (Student temp3 : mergedRoom.getOccupants())
-								System.out.print(temp3.getName() + ", ");
+							// System.out.println("\nNEW ROOM CONTAINS: ");
+							// for (Student temp3 : mergedRoom.getOccupants())
+							// System.out.print(temp3.getName() + ", ");
 						}
 					}
 				}
 
 			}
+		}
+
+		ArrayList<Room> roomsWithoutLoves = new ArrayList<Room>();
+		for (Student temp : students) {
+			if (null != temp.getRoom())
+				continue;
+
+			boolean noRoomYet = true;
+			for (Room tempRoom : roomsWithoutLoves) {
+				if (noRoomYet && tempRoom.isCompatibleWithStudent(temp)) {
+					tempRoom.addStudent(temp, true);
+					noRoomYet = false;
+				}
+			}
+
+			if (noRoomYet) {
+				Room newRoom = new Room();
+				newRoom.addStudent(temp, true);
+
+				roomsWithoutLoves.add(newRoom);
+				roomList.add(newRoom);
+			}
+
 		}
 
 		return roomList;

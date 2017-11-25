@@ -67,7 +67,7 @@ public class TextFileExtractor {
 
 		Punkt p1 = new Punkt(x1, y1);
 		Punkt p2 = new Punkt(x2, y2);
-		syso(p1, p2);
+		//syso(p1, p2);
 
 
 		Gerade gerade = new Gerade(p1, p2);

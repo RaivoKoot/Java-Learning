@@ -7,27 +7,27 @@ import logicPackage.dataPackage.Schnittpunkt;
 
 public class Main {
 
-	static final String FILE_NAME = "dreiecke1.txt";
+	static final String FILE_NAME = "dreiecke2.txt";
 
 	public static void main(String[] args) {
 
 		Gerade[] geraden = extractLines(FILE_NAME);
 
 		ArrayList<Schnittpunkt> schnittpunkte = getValidIntersects(geraden);
-		System.out.println("Schnittpunkte: " + schnittpunkte.size());
+		//System.out.println("Schnittpunkte: " + schnittpunkte.size());
 
 		ArrayList<Dreieck> dreiecke = getSubsetsOfThree(schnittpunkte);
-		System.out.println(dreiecke.size());
+		//System.out.println(dreiecke.size());
 
 		ArrayList<Dreieck> validDreiecke = getValidDreiecke(dreiecke);
 
-		System.out.println("\n\n" + validDreiecke.size());
+		//System.out.println("\n\n" + validDreiecke.size());
 
 		// ExportTriangles.writeToFile();
 
 		String outputString = ExportTriangles.createOutputString(validDreiecke);
 		
-		System.out.println(outputString);
+		//System.out.println(outputString);
 		
 		ExportTriangles.writeToFile(outputString);
 	}
@@ -35,8 +35,8 @@ public class Main {
 	public static Gerade[] extractLines(String fileName) {
 		Gerade[] geraden = TextFileExtractor.extractLines(fileName);
 		for (int i = 0; i < geraden.length; i++) {
-			System.out.println("\nGerade Number " + (i + 1) + ": " + geraden[i].toString());
-			System.out.println(geraden[i].getGeradenGleichungVektorForm().toString());
+			//System.out.println("\nGerade Number " + (i + 1) + ": " + geraden[i].toString());
+			//System.out.println(geraden[i].getGeradenGleichungVektorForm().toString());
 
 		}
 
@@ -47,7 +47,7 @@ public class Main {
 		ArrayList<Schnittpunkt> schnittpunkte = new ArrayList<Schnittpunkt>();
 
 		int counter = 0;
-		System.out.println("\n\n\n");
+		//System.out.println("\n\n\n");
 		int listLength = lines.length;
 		for (int i = 0; i < lines.length; i++) {
 			for (int j = i + 1; j < lines.length; j++) {
@@ -58,21 +58,21 @@ public class Main {
 				if (sp != null) {
 					// System.out.println(sp.getMutterGerade_eins().toString());
 					// System.out.println(sp.getMutterGerade_zwei().toString());
-					System.out.println("\n\n**************************************");
+					//System.out.println("\n\n**************************************");
 					if (g1.liegtPunktAufStrecke(sp) == true && g2.liegtPunktAufStrecke(sp) == true)
 						schnittpunkte.add(sp);
-					else
-						System.out.println(sp.toString()
-								+ " is not on the line !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
-				} else
-					System.out.println("null\n\n");
+					//else
+						//System.out.println(sp.toString()
+							//	+ " is not on the line !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+				} //else
+					//System.out.println("null\n\n");
 			}
 		}
 
-		System.out.println("COUNTER: " + counter);
+		//System.out.println("COUNTER: " + counter);
 
-		for (Schnittpunkt sp : schnittpunkte)
-			System.out.println(sp.toString());
+		//for (Schnittpunkt sp : schnittpunkte)
+			//System.out.println(sp.toString());
 
 		return schnittpunkte;
 	}

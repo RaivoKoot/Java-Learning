@@ -1,24 +1,26 @@
-package logic;
+ package logic;
 
 import java.util.ArrayList;
 
 import data.DataStorage;
+import data.ExportRooms;
 import data.PullFromInputFile;
 
 public class Testklasse {
 
 	public static void main(String[] args) {
 
-		PullFromInputFile.collectData();
+		PullFromInputFile.collectData("zimmerbelegungTest.txt");
 		// DataStorage.printStudents();
 
 		ArrayList<Student> students = DataStorage.getStudents();
 
 		ArrayList<Room> roomConstellation = RoomCreator.createRoomConstellation(students);
 
-		System.out.println();
-		ListPrinter.printRoomList(roomConstellation);
+		String outputString = ExportRooms.createOutputString(roomConstellation);
+		System.out.println(outputString);
 		
+		ExportRooms.writeToFile(outputString);
 	
 
 	}

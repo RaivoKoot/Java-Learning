@@ -73,4 +73,17 @@ public class Room {
 
 	}
 
+	public boolean isCompatibleWithStudent(Student st) {
+		if (doesRoomHateStudent(st) == true)
+			return false;
+
+		ArrayList<Student> studentsHateList = st.getHateList();
+		for (Student occTemp : occupants)
+			for (Student hateTemp : studentsHateList)
+				if (occTemp == hateTemp)
+					return false;
+
+		return true;
+	}
+
 }

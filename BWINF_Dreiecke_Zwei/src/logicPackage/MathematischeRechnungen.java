@@ -37,11 +37,11 @@ public final class MathematischeRechnungen {
 		// steigung gleich -> kein Schnittpunkt
 		if (g1.getSteigung().compareTo(g2.getSteigung()) == 0) {
 
-			System.out.println("***************");
-			System.out.println("Kein Schnittpunkt zwischen");
-			System.out.println(g1.toString());
-			System.out.println(g2.toString());
-			System.out.println("***************");
+			//System.out.println("***************");
+			//System.out.println("Kein Schnittpunkt zwischen");
+			//System.out.println(g1.toString());
+			//System.out.println(g2.toString());
+		//	System.out.println("***************");
 			return null;
 		}
 
@@ -192,14 +192,14 @@ public final class MathematischeRechnungen {
 			return true;
 		}
 
-		System.out.println(t.compareTo(new Fraction(0,0)));
-		System.out.println(t.compareTo(new Fraction(1)));
-		System.out.println(t.toString()+" ist out of Bounds");
+		//System.out.println(t.compareTo(new Fraction(0,0)));
+		//System.out.println(t.compareTo(new Fraction(1)));
+		//System.out.println(t.toString()+" ist out of Bounds");
 		return false;
 	}
 
 	public static Fraction punktProbe(GeradenGleichung g0, Punkt p) {
-		System.out.println("********\nSchnittpunkt: " + p.toString());
+		//System.out.println("********\nSchnittpunkt: " + p.toString());
 		Gleichung gleichung1 = new Gleichung(p.getX(), g0.getOrtsvektor().getX(), new Fraction(0),
 				g0.getRichtungsVektor().getX());
 		Gleichung gleichung2 = new Gleichung(p.getY(), g0.getOrtsvektor().getY(), new Fraction(0),
@@ -208,11 +208,11 @@ public final class MathematischeRechnungen {
 		Fraction t1 = loeseGleichung(gleichung1);
 		Fraction t2 = loeseGleichung(gleichung2);
 
-		System.out.println("Geradengleichung: " + g0.toString());
-		System.out.println("Gleichung I: " + gleichung1.toString());
-		System.out.println("t1: " + t1);
-		System.out.println("Gleichung II: " + gleichung2.toString());
-		System.out.println("t2: " + t2);
+		//System.out.println("Geradengleichung: " + g0.toString());
+		//System.out.println("Gleichung I: " + gleichung1.toString());
+		//System.out.println("t1: " + t1);
+		//System.out.println("Gleichung II: " + gleichung2.toString());
+	//	System.out.println("t2: " + t2);
 
 		if (t1.compareTo(t2) == 0)
 			return t1;

@@ -181,7 +181,7 @@ public class Fraction implements Comparable<Fraction> {
 		else if (product < 0)
 			return 1 * switchValue;
 
-		System.out.println("\t\t\tNUMBERS ARE EQUAL");
+		//System.out.println("\t\t\tNUMBERS ARE EQUAL");
 		return 0;
 	}
 

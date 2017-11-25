@@ -10,14 +10,13 @@ import logic.Student;
 
 public class PullFromInputFile {
 
-	private static String fileName = "zimmerbelegung3.txt";
 
 	private static String line;
 
-	public static void collectData() {
+	public static void collectData(String fileURL) {
 		try {
 
-			FileReader fileReader = new FileReader(fileName);
+			FileReader fileReader = new FileReader(fileURL);
 
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
