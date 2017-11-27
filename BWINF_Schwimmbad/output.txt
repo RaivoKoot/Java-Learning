@@ -1,0 +1,17 @@
+Number of Tickets: 6
+1 coupons are used to skip a student
+A coupon is used to get 10 Percent off the entire price
+
+17+ Ticket: 3.5
+Group Ticket: 11.0
+Group Ticket: 11.0
+Group Ticket: 11.0
+Group Ticket: 11.0
+Group Ticket: 11.0
+FINAL PRICE: 52.65
+
+WARNING: If you have a child with you that is 3 years or younger
+
+and you do not have at least one person with a mininum age of 17 years
+
+with you, you will not be able to enter

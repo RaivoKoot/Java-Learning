@@ -107,21 +107,6 @@ public final class MathematischeRechnungen {
 
 	}
 
-	/*
-	 * public static Fraction getYOfX(Fraction x, Gerade g1, boolean findingX) {
-	 * Fraction y;
-	 * 
-	 * if (g1.isAFunction()) { if (findingX) { y = x.multiply(g1.getSteigung()); y =
-	 * y.add(g1.getYSchnittpunkt()); } else { y =
-	 * x.subtractBy(g1.getYSchnittpunkt()); y = y.divideBy(g1.getSteigung()); } }
-	 * else if (g1.isHorizontalStrecke()) y = g1.getPunkt_Eins().getX(); else y =
-	 * g1.getPunkt_Eins().getY();
-	 * 
-	 * return y;
-	 * 
-	 * }
-	 */
-
 	public static Punkt makePunkt(Fraction x, Fraction y) {
 		Punkt neuerPunkt = new Punkt(x, y);
 
