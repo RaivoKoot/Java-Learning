@@ -35,72 +35,61 @@ public final class MathematischeRechnungen {
 	public static Schnittpunkt berechneGeradenSchnittpunk(Gerade g1, Gerade g2) {
 
 		// steigung gleich -> kein Schnittpunkt
-		if (g1.getSteigung().compareTo(g2.getSteigung()) == 0) {
-
-			//System.out.println("***************");
-			//System.out.println("Kein Schnittpunkt zwischen");
-			//System.out.println(g1.toString());
-			//System.out.println(g2.toString());
-		//	System.out.println("***************");
+		if (g1.getSteigung().compareTo(g2.getSteigung()) == 0)
 			return null;
-		}
 
-		Fraction x;
+		Fraction xKoordinate;
+		Gerade geradeZumXEinsetzen = g2;
 
 		/*
-		 * beide Geraden normale Funktionen, dann geraden gleich stellen und Schnittpunk
-		 * finden
+		 * sind beide Geraden Funktionen, dann Geraden gleich stellen und x Koordinate
+		 * des Schnittpunkts finden
 		 */
-
-		Gerade einsetzungGerade = g2;
-
 		if (g1.isAFunction() && g2.isAFunction()) {
 			Gleichung geradenGleichGestellt = new Gleichung(g1.getYSchnittpunkt(), g2.getYSchnittpunkt(),
 					g1.getSteigung(), g2.getSteigung());
-			x = loeseGleichung(geradenGleichGestellt);
+			xKoordinate = loeseGleichung(geradenGleichGestellt);
 
 			/*
-			 * eine der Geraden ist parallel zur y-Achse und keine Funktion. Schnittpunkt
-			 * muss also anders berechnet werden
+			 * Ansonsten eine der Geraden ist parallel zur y-Achse und keine Funktion.
+			 * Schnittpunkt muss also anders berechnet werden
 			 */
 		} else {
-			Fraction knownVariable = null;
 
-			 if (g1.isVertikalStrecke()) {
-				knownVariable = g1.getPunkt_Eins().getX();
-			} else {
-				knownVariable = g2.getPunkt_Eins().getX();
-				einsetzungGerade = g1;
+			// wenn g1 parallel zur y-Achse ist
+			if (g1.isVertikalStrecke())
+				xKoordinate = g1.getPunkt_Eins().getX();
+
+			// ansonsten ist g2 parallel zur y-Achse
+			else {
+				xKoordinate = g2.getPunkt_Eins().getX();
+				geradeZumXEinsetzen = g1;
 			}
 
-			x = knownVariable;
 		}
-		Fraction y;
-		
-		/*
-		if (g1.isHorizontalStrecke() || g2.isHorizontalStrecke()) {
-			y = getYOfX(x, einsetzungGerade, false);
-			return new Schnittpunkt(y, x, g1, g2);
-		}
-		*/
 
-		y = getYOfX(x, einsetzungGerade, true);
+		Fraction yKoordinate;
 
-		return new Schnittpunkt(x, y, g1, g2);
+		// setze x in die Gleichung ein um y zu bekommen
+		yKoordinate = getYOfX(xKoordinate, geradeZumXEinsetzen);
+
+		// erstelle neuen Schnittpunkt dessen Eltern g1 und g2 sind
+		return new Schnittpunkt(xKoordinate, yKoordinate, g1, g2);
 	}
 
-	public static Fraction getYOfX(Fraction x, Gerade g1, boolean findingY) {
+	public static Fraction getYOfX(Fraction x, Gerade g1) {
+		//f(x)
 		Fraction y;
 
+		// wenn Gerade g1 eine korrekte Funktion ist
 		if (g1.isAFunction()) {
-			if (findingY) {
-				y = x.multiply(g1.getSteigung());
-				y = y.add(g1.getYSchnittpunkt());
-			} else {
-				y = x.subtractBy(g1.getYSchnittpunkt());
-				y = y.divideBy(g1.getSteigung());
-			}
-		} else 
+			// y = x*steigung + ySchnittpunkt oder auch b genannt
+			y = x.multiply(g1.getSteigung());
+			y = y.add(g1.getYSchnittpunkt());
+
+		// ansonsten ist die Gerade parallel zur y-Achse und wir suchen x statt y
+		} else
+			// bei solch einer Geraden ist x immer gleich also returnen wir x
 			y = g1.getPunkt_Eins().getX();
 
 		return y;
@@ -133,80 +122,48 @@ public final class MathematischeRechnungen {
 		return x;
 	}
 
-	/*
-	 * public static BigDecimal loeseGleichungsSystemZweiVariablen(GeradenGleichung
-	 * g1, GeradenGleichung g2) { BigDecimal parameterSResultat; BigDecimal
-	 * parameterRResultat;
-	 * 
-	 * // nach parameter 1 loesen Gleichung gleichungI = new
-	 * Gleichung(g1.getOrtsvektor().getX(), g1.getRichtungsVektor().getX(),
-	 * g2.getOrtsvektor().getX(), g2.getRichtungsVektor().getX());
-	 * 
-	 * Gleichung gleichungII = new Gleichung(g1.getOrtsvektor().getY(),
-	 * g1.getRichtungsVektor().getY(), g2.getOrtsvektor().getY(),
-	 * g2.getRichtungsVektor().getY());
-	 * 
-	 * BigDecimal[] parameterS = loeseGleichungZweiVariablen(gleichungI);
-	 * 
-	 * // mit parameter 1 parameter 2 loesen
-	 * 
-	 * return null; }
-	 * 
-	 * public static BigDecimal[] loeseGleichungZweiVariablen(Gleichung gleichung) {
-	 * 
-	 * BigDecimal gleichungLinkeNummer = gleichung.getGleichungLinkeNummer();
-	 * BigDecimal gleichungRechteNummer = gleichung.getGleichungRechteNummer();
-	 * 
-	 * BigDecimal gleichungLinksR = gleichung.getGleichungLinkesX(); BigDecimal
-	 * gleichungRechtsS = gleichung.getGleichungRechtesX();
-	 * 
-	 * // bringt beide nummern auf die linke seite der gleichung BigDecimal summandB
-	 * = bringeAufEineSeite(gleichungLinkeNummer, gleichungRechteNummer);
-	 * 
-	 * summandB.divide(gleichungRechtsS, 2, RoundingMode.HALF_UP);
-	 * gleichungLinksR.divide(gleichungRechtsS, 2, RoundingMode.HALF_UP);
-	 * 
-	 * // variable auf der rechten seite s = summandB + gleichungLinksR BigDecimal[]
-	 * rIstGleich = { summandB, gleichungLinksR };
-	 * 
-	 * return rIstGleich; }
-	 */
 	public static boolean liegtPunktAufStrecke(Fraction t) {
 		// wenn t zwischen 0 und 1 ist
-		if (t.compareTo(new Fraction(0,0)) >= 0 && t.compareTo(new Fraction(1)) <= 0) {
+		if (t.compareTo(new Fraction(0, 0)) >= 0 && t.compareTo(new Fraction(1)) <= 0) {
 			return true;
 		}
 
-		//System.out.println(t.compareTo(new Fraction(0,0)));
-		//System.out.println(t.compareTo(new Fraction(1)));
-		//System.out.println(t.toString()+" ist out of Bounds");
+		// System.out.println(t.compareTo(new Fraction(0,0)));
+		// System.out.println(t.compareTo(new Fraction(1)));
+		// System.out.println(t.toString()+" ist out of Bounds");
 		return false;
 	}
 
+	/*
+	 * gibt den Parameter t zuerueck, der in der Gleichung eingesetzt Punkt p ergibt
+	 */
 	public static Fraction punktProbe(GeradenGleichung g0, Punkt p) {
-		//System.out.println("********\nSchnittpunkt: " + p.toString());
+
+		// Erstelle das Gleichungssystem aus 2 Gleichungen
+
+		// Gleichung 1 aus der x Zeile
 		Gleichung gleichung1 = new Gleichung(p.getX(), g0.getOrtsvektor().getX(), new Fraction(0),
 				g0.getRichtungsVektor().getX());
+
+		// Gleichung 2 aus der y Zeile
 		Gleichung gleichung2 = new Gleichung(p.getY(), g0.getOrtsvektor().getY(), new Fraction(0),
 				g0.getRichtungsVektor().getY());
 
+		// loese nach dem Parameter t auf
 		Fraction t1 = loeseGleichung(gleichung1);
 		Fraction t2 = loeseGleichung(gleichung2);
 
-		//System.out.println("Geradengleichung: " + g0.toString());
-		//System.out.println("Gleichung I: " + gleichung1.toString());
-		//System.out.println("t1: " + t1);
-		//System.out.println("Gleichung II: " + gleichung2.toString());
-	//	System.out.println("t2: " + t2);
+		// da wir bereits wissen dass der schnittpunkt auf der geraden liegt und t1 und
+		// t2 gleich sein muessen, koennen wir eines der beiden ts ohne weiteres
+		// zurueckgeben
 
-		if (t1.compareTo(t2) == 0)
-			return t1;
-		else if (t1.compareTo(new Fraction(0)) == 0)
+		// Es kann jedoch sein, dass einer der beiden Gleichungen kein t mehr enthaelt.
+		// Das aeussert sich hier indem t 0 ist (t kann auch wirklich 0 sein). In dem
+		// fall das andere t zurueckgeben.
+		if (t1.compareTo(new Fraction(0)) == 0)
 			return t2;
-		else if (t2.compareTo(new Fraction(0)) == 0)
+		else
 			return t1;
-
-		return new Fraction(-10);
 	}
 
 	public static Punkt tEinsetzenInVektorGleichung(Fraction t, GeradenGleichung g) {

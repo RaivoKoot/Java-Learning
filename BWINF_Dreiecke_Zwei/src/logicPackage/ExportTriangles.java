@@ -26,8 +26,7 @@ public class ExportTriangles {
 
 		for (Dreieck temp : dreiecke) {
 			Schnittpunkt[] eckPunkte = temp.getEckPunkte();
-			String triangleInfo = "\n*********************************************\n";
-			triangleInfo += "\t\tDreieck " + triangleCounter;
+			String triangleInfo = "\t\tDreieck " + triangleCounter;
 
 			triangleInfo += "\np1: " + eckPunkte[0].toString();
 			triangleInfo += "\np2: " + eckPunkte[1].toString();
