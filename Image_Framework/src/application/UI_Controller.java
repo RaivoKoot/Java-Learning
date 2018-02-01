@@ -7,6 +7,11 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javax.imageio.ImageIO;
+
+import java.awt.Color;
+
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,7 +22,8 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class UI_Controller implements Displays_Images, Initializable {
+public class UI_Controller implements Displays_Images, Initializable
+{
 
 	@FXML
 	private Button btn_file_select;
@@ -34,15 +40,17 @@ public class UI_Controller implements Displays_Images, Initializable {
 
 	// makes the image as large as possible depending on size of monitor
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle resources)
+	{
 
 		initialize_imageView_size();
-		
+
 		logic = new Logic_Layer();
 
 	}
 
-	public void btn_file_select_clicked() {
+	public void btn_file_select_clicked()
+	{
 		File image_file = select_a_file_in_explorer();
 
 		setMap(image_file);
@@ -50,17 +58,61 @@ public class UI_Controller implements Displays_Images, Initializable {
 		display_image_file(getMap());
 	}
 
-	public void btn_start_algorithm_clicked() {
+	public void btn_start_algorithm_clicked()
+	{
+		start_task();
+	}
 
+	public void start_task()
+	{
+		Runnable task = new Runnable()
+		{
+			public void run()
+			{
+				runTask();
+			}
+		};
+
+		Thread backgroundThread = new Thread(task);
+
+		backgroundThread.setDaemon(true);
+		backgroundThread.start();
+	}
+
+	public void runTask()
+	{
 		logic.setMap(map);
-		logic.edit_image();
-		BufferedImage new_map = logic.getMap();
-		
-		display_bufferedImage(new_map);
+
+		System.out.println("test");
+
+		for (int x = 300; x < 500; x++)
+		{
+			try
+			{
+				//logic.edit_pixel(x, 300, Color.MAGENTA.getRGB());
+				
+				//BufferedImage new_map = logic.getMap();
+				
+				BufferedImage buffered_image = ImageIO.read(map);
+				
+				buffered_image.setRGB(x, 300, Color.ORANGE.getRGB());
+				Platform.runLater(new Runnable()
+				{
+					public void run()
+					{
+						display_bufferedImage(buffered_image);
+					}
+				});
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
-	public void display_bufferedImage(BufferedImage buffered_image) {
+	public void display_bufferedImage(BufferedImage buffered_image)
+	{
 
 		Image image = SwingFXUtils.toFXImage(buffered_image, null);
 
@@ -69,7 +121,8 @@ public class UI_Controller implements Displays_Images, Initializable {
 	}
 
 	@Override
-	public void display_image_file(File image_file) {
+	public void display_image_file(File image_file)
+	{
 
 		Image image = new Image(image_file.toURI().toString());
 
@@ -78,14 +131,16 @@ public class UI_Controller implements Displays_Images, Initializable {
 	}
 
 	@Override
-	public void display_image(Image image) {
+	public void display_image(Image image)
+	{
 
 		map_container.setImage(image);
 
 	}
 
 	@Override
-	public File select_a_file_in_explorer() {
+	public File select_a_file_in_explorer()
+	{
 		FileChooser file_chooser = new FileChooser();
 		file_chooser.setTitle("chose the map file");
 		file_chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", "*.*"));
@@ -95,15 +150,18 @@ public class UI_Controller implements Displays_Images, Initializable {
 		return file_chooser.showOpenDialog(file_chooser_window);
 	}
 
-	public File getMap() {
+	public File getMap()
+	{
 		return map;
 	}
 
-	public void setMap(File map) {
+	public void setMap(File map)
+	{
 		this.map = map;
 	}
 
-	public void initialize_imageView_size() {
+	public void initialize_imageView_size()
+	{
 		// gets the size of the screen in pixels
 		Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
 
