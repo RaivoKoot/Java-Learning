@@ -45,7 +45,7 @@ public class Testclass
 		}
 		
 		Data.setMap(map);
-		Data.add_waypoint(new Location(1898, 591));
+		Data.add_waypoint(new Location(1071, 828));
 		Image_Scanner.find_starts_and_destination();
 
 		Location destination = Data.getDestination();

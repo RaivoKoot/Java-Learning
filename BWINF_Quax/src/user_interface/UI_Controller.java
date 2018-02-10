@@ -56,7 +56,6 @@ public class UI_Controller implements Displays_Images, Initializable
 	@FXML
 	private ImageView map_container;
 	private File map;
-	private BufferedImage buffered_map;
 
 	private ArrayList<Zone> path_history;
 
@@ -76,7 +75,7 @@ public class UI_Controller implements Displays_Images, Initializable
 			setMap(image_file);
 			try
 			{
-				setBuffered_map(ImageIO.read(image_file));
+				Data.setMap(ImageIO.read(image_file));
 			} catch (IOException e)
 			{
 				// TODO Auto-generated catch block
@@ -137,11 +136,6 @@ public class UI_Controller implements Displays_Images, Initializable
 		this.map = map;
 	}
 
-	public void setBuffered_map(BufferedImage buffered_map)
-	{
-		this.buffered_map = buffered_map;
-	}
-
 	// makes the image as large as possible depending on size of monitor
 	public void initialize_imageView_size()
 	{
@@ -162,8 +156,6 @@ public class UI_Controller implements Displays_Images, Initializable
 	 */
 	public void scan_starts_clicked()
 	{
-		Data.setMap(buffered_map);
-
 		Image_Scanner.find_starts_and_destination();
 
 		String starts = Image_Scanner.starts_toString();
@@ -176,10 +168,13 @@ public class UI_Controller implements Displays_Images, Initializable
 
 	public void run_algorithm()
 	{
+		System.out.println("arrived 1");
 		int chosen_x = Integer.parseInt(tfield_x.getText());
 		int chosen_y = Integer.parseInt(tfield_y.getText());
 		Location start_loc = new Location(chosen_x, chosen_y);
 		Data.add_waypoint(start_loc);
+
+		System.out.println("arrived 2");
 
 		Location destination = Data.getDestination();
 		Zone dest = new Zone();
@@ -187,9 +182,15 @@ public class UI_Controller implements Displays_Images, Initializable
 
 		Zone start = new Zone(start_loc, dest);
 
-		ArrayList<Zone> path = Pathfinding_Algorithm.find_path(start, dest, buffered_map);
+		System.out.println("arrived 3");
+
+		ArrayList<Zone> path = Pathfinding_Algorithm.find_path(start, dest, Data.getMap());
+
+		System.out.println("arrived 4");
 
 		Data.setPath(path);
+
+		System.out.println("arrived 5");
 	}
 
 	/*
@@ -212,6 +213,7 @@ public class UI_Controller implements Displays_Images, Initializable
 					{
 
 						ArrayList<Zone> path = Data.getPath();
+						BufferedImage buffered_map = Data.getMap();
 
 						// background work
 						for (Zone zone : path)

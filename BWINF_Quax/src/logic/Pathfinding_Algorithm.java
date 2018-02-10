@@ -14,15 +14,22 @@ public class Pathfinding_Algorithm
 	// finds a path between start
 	public static ArrayList<Zone> find_path(Zone start, Zone destination, BufferedImage map)
 	{
+		System.out.println("ONEE");
 		ArrayList<Zone> path_history = new ArrayList<Zone>();
+		System.out.println("mid");
 		Zone[][] zones_visited = new Zone[map.getWidth()][map.getHeight()];
 
+		System.out.println("Two");
 		Zone current_zone = start;
 		path_history.add(current_zone);
+		
+		System.out.println("preloop");
 
 		// while not arrived at destination or limit not met
-		for (int counter = 0; current_zone.getDistance_to_destination() != 0 && counter < 5000; counter++)
+		for (int counter = 0; current_zone.getDistance_to_destination() != 0 && counter < 2500; counter++)
 		{
+			
+			System.out.println(current_zone.toString());
 
 			// mark as visited
 			current_zone.setComputed(true);
