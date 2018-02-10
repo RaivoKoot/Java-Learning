@@ -4,11 +4,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import javafx.scene.image.Image;
+import data.Data;
 
 public class Testclass
 {
@@ -35,39 +34,27 @@ public class Testclass
 
 	public static void main(String[] args)
 	{
-		File image_file = new File("C:\\Users\\spong\\quax2.png");
-		BufferedImage buffered_map = null;
-
+		BufferedImage map = null;
 		try
 		{
-			buffered_map = ImageIO.read(image_file);
+			map = ImageIO.read(new File("C:\\Users\\spong\\quax3.png"));
 		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Image_Data_Scanner setup = new Image_Data_Scanner(buffered_map);
+		
+		Data.setMap(map);
+		Data.add_waypoint(new Location(1898, 591));
+		Image_Scanner.find_starts_and_destination();
 
-		Location start_loc = new Location(844, 66);
-		Image_Data_Scanner.setStart(start_loc);
-
-		Image_Data_Scanner.find_starts_and_destination();
-		Location destination = Image_Data_Scanner.getDestination();
+		Location destination = Data.getDestination();
 		Zone dest = new Zone();
 		dest.setPixels_in_zone(new Location[] { destination });
+		Zone start = new Zone(new Location(1898, 591), dest);
 
-		Zone start = new Zone(start_loc, dest);
+		ArrayList<Zone> path = Pathfinding_Algorithm.find_path(start, dest, map);
 
-		ArrayList<Zone> path = new ArrayList<Zone>();
-		path.add(start);
-
-		Zone[][] pixels_visited = new Zone[buffered_map.getWidth()][buffered_map.getHeight()];
-		int waypoint_cooldown = 0;
-		int counter = 0;
-		int parameter_cooldown = 0;
-
-		ArrayList<Zone> path_new = Pathfinding_Algorithm.take_step(path, pixels_visited, start, dest, buffered_map,
-				counter, waypoint_cooldown, parameter_cooldown);
 	}
 
 }

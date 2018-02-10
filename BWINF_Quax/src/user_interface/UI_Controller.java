@@ -11,6 +11,8 @@ import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
+import data.Data;
+
 import java.awt.Color;
 
 import javafx.application.Platform;
@@ -30,7 +32,7 @@ import javafx.stage.Stage;
 import logic.Location;
 import logic.Pathfinding_Algorithm;
 import logic.Zone;
-import logic.Image_Data_Scanner;
+import logic.Image_Scanner;
 
 public class UI_Controller implements Displays_Images, Initializable
 {
@@ -55,6 +57,8 @@ public class UI_Controller implements Displays_Images, Initializable
 	private ImageView map_container;
 	private File map;
 	private BufferedImage buffered_map;
+
+	private ArrayList<Zone> path_history;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
@@ -158,15 +162,16 @@ public class UI_Controller implements Displays_Images, Initializable
 	 */
 	public void scan_starts_clicked()
 	{
-		Image_Data_Scanner setup = new Image_Data_Scanner(buffered_map);
+		Data.setMap(buffered_map);
 
-		Image_Data_Scanner.find_starts_and_destination();
+		Image_Scanner.find_starts_and_destination();
 
-		String starts = setup.starts_toString();
-		String dest = Image_Data_Scanner.getDestination().toString();
+		String starts = Image_Scanner.starts_toString();
+		String dest = Data.getDestination().toString();
+
 		tarea_starts.setText(starts + "\nDestination " + dest);
 
-		display_bufferedImage(setup.visualize_locations());
+		display_bufferedImage(Image_Scanner.visualize_locations());
 	}
 
 	public void run_algorithm()
@@ -174,25 +179,17 @@ public class UI_Controller implements Displays_Images, Initializable
 		int chosen_x = Integer.parseInt(tfield_x.getText());
 		int chosen_y = Integer.parseInt(tfield_y.getText());
 		Location start_loc = new Location(chosen_x, chosen_y);
-		Image_Data_Scanner.setStart(start_loc);
+		Data.add_waypoint(start_loc);
 
-		Location destination = Image_Data_Scanner.getDestination();
+		Location destination = Data.getDestination();
 		Zone dest = new Zone();
 		dest.setPixels_in_zone(new Location[] { destination });
 
 		Zone start = new Zone(start_loc, dest);
 
-		ArrayList<Zone> path = new ArrayList<Zone>();
-		path.add(start);
+		ArrayList<Zone> path = Pathfinding_Algorithm.find_path(start, dest, buffered_map);
 
-		Zone[][] pixels_visited = new Zone[buffered_map.getWidth()][buffered_map.getHeight()];
-		int waypoint_cooldown = 0;
-		int counter = 0;
-		int parameter_cooldown = 0;
-
-		ArrayList<Zone> path_new = Pathfinding_Algorithm.take_step(path, pixels_visited, start, dest, buffered_map,
-				counter, waypoint_cooldown, parameter_cooldown);
-
+		Data.setPath(path);
 	}
 
 	/*
@@ -214,10 +211,10 @@ public class UI_Controller implements Displays_Images, Initializable
 					protected Void call() throws Exception
 					{
 
-						ArrayList<Zone> path_new = Pathfinding_Algorithm.getHistory();
+						ArrayList<Zone> path = Data.getPath();
 
 						// background work
-						for (Zone zone : path_new)
+						for (Zone zone : path)
 						{
 							// logic.edit_pixel(x, 300, Color.CYAN.getRGB(), buffered_map);
 							Location location = zone.getLocation();
@@ -251,6 +248,16 @@ public class UI_Controller implements Displays_Images, Initializable
 			}
 		};
 		service.start();
+	}
+
+	public ArrayList<Zone> getPath_history()
+	{
+		return path_history;
+	}
+
+	public void setPath_history(ArrayList<Zone> path_history)
+	{
+		this.path_history = path_history;
 	}
 
 }

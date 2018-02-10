@@ -3,6 +3,9 @@ package logic;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import data.Data;
+import data.Parameters;
+
 public class Zone implements Comparable<Zone>
 {
 
@@ -54,7 +57,8 @@ public class Zone implements Comparable<Zone>
 		pixels_in_zone[2] = new Location(x + 1, y + 1);
 		pixels_in_zone[3] = new Location(x + 0, y + 1);
 
-		compute_dist_to(destination);
+		int dist_dest = compute_dist_to(destination);
+		setDistance_to_destination(dist_dest);
 		compute_cost();
 
 	}
@@ -65,13 +69,9 @@ public class Zone implements Comparable<Zone>
 	{
 		try
 		{
-			System.out.println("size " + neighbors.getSize());
 			if (neighbors.getSize() != 0)
-			{
-				System.out.println("RETURN");
 				return;
-			}
-			System.out.println("not return");
+
 			Location center = getLocation();
 			int center_x = center.getX();
 			int center_y = center.getY();
@@ -83,7 +83,6 @@ public class Zone implements Comparable<Zone>
 				{
 					if (x == center_x && y == center_y)
 						continue;
-					System.out.println("iteration");
 
 					Zone neighbor = zone_storage[x][y];
 
@@ -103,12 +102,12 @@ public class Zone implements Comparable<Zone>
 		}
 	}
 
-	public void compute_dist_to(Zone destination)
+	public int compute_dist_to(Zone destination)
 	{
 		Location dest = destination.getLocation();
 		Location here = getLocation();
 
-		distance_to_destination = here.get_distance_to(dest);
+		return here.get_distance_to(dest);
 	}
 
 	// Computes the cost of the current location
@@ -116,10 +115,9 @@ public class Zone implements Comparable<Zone>
 	{
 		Location here = getLocation();
 
-		ArrayList<Location> waypoints = Image_Data_Scanner.getWaypoints();
-		Location start = Image_Data_Scanner.getStart();
+		Location start = Data.get_start();
 
-		Location last_waypoint = waypoints.get(waypoints.size() - 1);
+		Location last_waypoint = Data.get_last_waypoint();
 
 		// alternate largest 1d distance
 		// int dist_to_last_waypoint = here.get_distance_to(last_waypoint);
@@ -128,16 +126,25 @@ public class Zone implements Comparable<Zone>
 		// standard distance
 		int dist_to_last_waypoint = here.get_distance_to(last_waypoint);
 		int dist_to_start = here.get_distance_to(start);
+		int sum_waypoint_distances = 0;
 
-		int theta_one = Image_Data_Scanner.getTheta_one();
-		int theta_two = Image_Data_Scanner.getTheta_two();
-		int theta_three = Image_Data_Scanner.getTheta_three();
+		ArrayList<Location> waypoints = Data.getWaypoints();
+		for (int i = 1; i < waypoints.size(); i++)
+			sum_waypoint_distances += here.get_distance_to(waypoints.get(i));
 
-		// theta_two = 0;
-		// theta_three = 0;
+		if (dist_to_last_waypoint > 40 && Data.getWaypoints().size() > 1)
+		{
+			Parameters.setTheta_last_waypoint(0);
+			Parameters.setTheta_start(0);
+		}
 
-		cost = (distance_to_destination * theta_one) - (dist_to_start * theta_two)
-				- (dist_to_last_waypoint * theta_three);
+		int weight_destination = Parameters.getTheta_destination();
+		int weight_start = Parameters.getTheta_start();
+		int weight_waypoint = Parameters.getTheta_last_waypoint();
+
+		// cost function
+		cost = (distance_to_destination * weight_destination) - (dist_to_start * weight_start)
+				- (/* dist_to_last_waypoint */ sum_waypoint_distances * weight_waypoint);
 	}
 
 	public void sort_neighbours()
@@ -331,10 +338,10 @@ public class Zone implements Comparable<Zone>
 		int x = getLocation().getX();
 		int y = getLocation().getY();
 
-		if (x >= Image_Data_Scanner.getWidth() - 2 || x == 0)
+		if (x >= Data.getWidth() - 2 || x == 0)
 			return true;
 
-		if (y >= Image_Data_Scanner.getHeight() - 2 || y == 0)
+		if (y >= Data.getHeight() - 2 || y == 0)
 			return true;
 
 		return false;
