@@ -168,13 +168,10 @@ public class UI_Controller implements Displays_Images, Initializable
 
 	public void run_algorithm()
 	{
-		System.out.println("arrived 1");
 		int chosen_x = Integer.parseInt(tfield_x.getText());
 		int chosen_y = Integer.parseInt(tfield_y.getText());
 		Location start_loc = new Location(chosen_x, chosen_y);
 		Data.add_waypoint(start_loc);
-
-		System.out.println("arrived 2");
 
 		Location destination = Data.getDestination();
 		Zone dest = new Zone();
@@ -182,15 +179,9 @@ public class UI_Controller implements Displays_Images, Initializable
 
 		Zone start = new Zone(start_loc, dest);
 
-		System.out.println("arrived 3");
-
 		ArrayList<Zone> path = Pathfinding_Algorithm.find_path(start, dest, Data.getMap());
 
-		System.out.println("arrived 4");
-
 		Data.setPath(path);
-
-		System.out.println("arrived 5");
 	}
 
 	/*

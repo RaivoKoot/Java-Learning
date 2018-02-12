@@ -6,7 +6,7 @@ public class Parameters
 	private static int theta_start = 0;
 	private static int theta_last_waypoint = 0;
 	
-	private static double threshold_standard_deviation = 4;
+	private static double threshold_standard_deviation = 6;
 
 	public static int getTheta_destination()
 	{

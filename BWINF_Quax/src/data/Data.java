@@ -10,6 +10,7 @@ public class Data
 
 	private static ArrayList<Zone> path;
 	private static ArrayList<Location> waypoints = new ArrayList<Location>();
+
 	private static Location destination;
 
 	private static BufferedImage map;
@@ -17,25 +18,32 @@ public class Data
 	private static int width;
 	private static int height;
 
-	public static ArrayList<Zone> getPath()
+	private static ArrayList<Zone> available_nodes = new ArrayList<Zone>();
+
+	public static void add_available_node(Zone neighbor)
 	{
-		return path;
+		available_nodes.add(neighbor);
 	}
 
-	public static void setPath(ArrayList<Zone> path)
+	public static void sort_available_nodes()
 	{
-		Data.path = path;
+		for (Zone node : available_nodes)
+			node.compute_cost();
+		available_nodes.sort(null);
+	}
+
+	public static Zone get_best_available_zone()
+	{
+		for (Zone node : available_nodes)
+			if (!node.isComputed())
+				return node;
+
+		return null;
 	}
 
 	public static Location get_last_waypoint()
 	{
 		Location last_waypoint = waypoints.get(waypoints.size() - 1);
-		return last_waypoint;
-	}
-
-	public static Location get_start()
-	{
-		Location last_waypoint = waypoints.get(0);
 		return last_waypoint;
 	}
 
@@ -59,9 +67,25 @@ public class Data
 		Data.destination = destination;
 	}
 
+	public static Location get_start()
+	{
+		Location last_waypoint = waypoints.get(0);
+		return last_waypoint;
+	}
+
 	public static BufferedImage getMap()
 	{
 		return map;
+	}
+
+	public static ArrayList<Zone> getPath()
+	{
+		return path;
+	}
+
+	public static void setPath(ArrayList<Zone> path)
+	{
+		Data.path = path;
 	}
 
 	public static void setMap(BufferedImage map)
