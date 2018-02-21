@@ -6,11 +6,10 @@ import java.util.ArrayList;
 import data.Data;
 import data.Parameters;
 
-public class Zone implements Comparable<Zone>
-{
+public class Zone implements Comparable<Zone> {
 
 	private int terrain; // -1 water, 0 mixed, 1 land
-	private Location[] pixels_in_zone;
+	private ArrayList<Location> pixels_in_zone;
 	private boolean computed;
 	private boolean neighbours_sorted;
 
@@ -23,8 +22,7 @@ public class Zone implements Comparable<Zone>
 
 	private Zone zone_arrived_from;
 
-	public Zone()
-	{
+	public Zone() {
 		setTimes_visited(0);
 
 		distance_to_destination = -1;
@@ -37,8 +35,7 @@ public class Zone implements Comparable<Zone>
 	}
 
 	// initialize 2x2 from a location
-	public Zone(Location initial_pixel, Zone destination)
-	{
+	public Zone(Location initial_pixel, Zone destination, boolean large) {
 		setTimes_visited(0);
 		terrain = -999;
 		neighbors = new ZoneList();
@@ -46,9 +43,24 @@ public class Zone implements Comparable<Zone>
 		neighbours_sorted = false;
 		computed = false;
 
-		pixels_in_zone = new Location[4];
+		pixels_in_zone = new ArrayList<Location>();
+
+		if (!large)
+			add_pixels(initial_pixel);
+
+		int dist_dest = compute_dist_to(destination);
+		setDistance_to_destination(dist_dest);
+		compute_cost();
+
+	}
+	/*
+	 * make long zone creation possible through these two methods
+	 */
+
+	public void make_long_zone(Location initial_pixel) {
 
 		pixels_in_zone[0] = initial_pixel;
+		
 		int x = initial_pixel.getX();
 		int y = initial_pixel.getY();
 
@@ -56,19 +68,46 @@ public class Zone implements Comparable<Zone>
 		pixels_in_zone[1] = new Location(x + 1, y + 0);
 		pixels_in_zone[2] = new Location(x + 1, y + 1);
 		pixels_in_zone[3] = new Location(x + 0, y + 1);
+	}
+	
+	private Location get_location_closer_to_destination(Location start){
+		Location destination = Data.getDestination();
+		int dest_x = destination.getX();
+		int dest_y = destination.getY();
+		
+		int start_x = start.getX();
+		int start_y = start.getY();
+		
+	}
 
-		int dist_dest = compute_dist_to(destination);
-		setDistance_to_destination(dist_dest);
-		compute_cost();
+	public void add_pixels(Location initial_pixel) {
 
+		add_pixel(initial_pixel);
+		int x = initial_pixel.getX();
+		int y = initial_pixel.getY();
+
+		// creates 3 pixels
+		Location surrounding_pix_1 = new Location(x + 1, y + 0);
+		Location surrounding_pix_2 = new Location(x + 1, y + 1);
+		Location surrounding_pix_3 = new Location(x + 0, y + 1);
+
+		add_pixel(surrounding_pix_1);
+		add_pixel(surrounding_pix_2);
+		add_pixel(surrounding_pix_3);
+	}
+
+	public boolean add_pixel(Location pixel) {
+		if (pixels_in_zone.contains(pixel))
+			return false;
+
+		pixels_in_zone.add(pixel);
+		return true;
 	}
 
 	// creates or finds the 8 surrounding neighbor zones of this one and stores
 	// them in 'neighbors'
-	public void create_neighbor_zones(Zone[][] zone_storage, Zone destination)
-	{
-		try
-		{
+	public void create_neighbor_zones(Zone[][] zone_storage, Zone destination) {
+		try {
 			if (neighbors.getSize() != 0)
 				return;
 
@@ -79,16 +118,14 @@ public class Zone implements Comparable<Zone>
 			// create the 8 neighboring zones
 			for (int x = center_x - 1; x < center_x + 2; x++)
 
-				for (int y = center_y - 1; y < center_y + 2; y++)
-				{
+				for (int y = center_y - 1; y < center_y + 2; y++) {
 					if (x == center_x && y == center_y)
 						continue;
 
 					Zone neighbor = zone_storage[x][y];
 
-					if (neighbor == null)
-					{
-						neighbor = new Zone(new Location(x, y), destination);
+					if (neighbor == null) {
+						neighbor = new Zone(new Location(x, y), destination, false);
 						zone_storage[x][y] = neighbor;
 					} else
 						neighbor.compute_cost();
@@ -96,14 +133,12 @@ public class Zone implements Comparable<Zone>
 					neighbors.addZone(neighbor);
 
 				}
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public int compute_dist_to(Zone destination)
-	{
+	public int compute_dist_to(Zone destination) {
 		Location dest = destination.getLocation();
 		Location here = getLocation();
 
@@ -111,8 +146,7 @@ public class Zone implements Comparable<Zone>
 	}
 
 	// Computes the cost of the current location
-	public void compute_cost()
-	{
+	public void compute_cost() {
 		Location here = getLocation();
 
 		Location start = Data.get_start();
@@ -132,8 +166,7 @@ public class Zone implements Comparable<Zone>
 		for (int i = 1; i < waypoints.size(); i++)
 			sum_waypoint_distances += here.get_distance_to(waypoints.get(i));
 
-		if (dist_to_last_waypoint > 40 && Data.getWaypoints().size() > 1)
-		{
+		if (dist_to_last_waypoint > 40 && Data.getWaypoints().size() > 1) {
 			Parameters.setTheta_last_waypoint(0);
 			Parameters.setTheta_start(0);
 		}
@@ -147,32 +180,26 @@ public class Zone implements Comparable<Zone>
 				- (/* dist_to_last_waypoint */ sum_waypoint_distances * weight_waypoint);
 	}
 
-	public void sort_neighbours()
-	{
+	public void sort_neighbours() {
 		neighbors.sort();
 	}
 
-	public Zone get_next_best_neighbour()
-	{
+	public Zone get_next_best_neighbour() {
 		Zone next = neighbors.get_next_closest_zone();
 
 		return next;
 	}
 
-	public boolean isPassable(BufferedImage map)
-	{
+	public boolean isPassable(BufferedImage map) {
 
 		int white = -1;
 		int terrain = 4;
-		int amt_pixels = pixels_in_zone.length;
+		int amt_pixels = pixels_in_zone.size();
 
 		// check terrain of each pixel
-		for (int i = 0; i < amt_pixels; i++)
-		{
-			Location pixel = pixels_in_zone[i];
+		for (Location pixel : pixels_in_zone) {
 			// compare the color of the pixel
-			if (map.getRGB(pixel.getX(), pixel.getY()) == white)
-			{
+			if (map.getRGB(pixel.getX(), pixel.getY()) == white) {
 				// large zone and one pixel is water -> unsure
 				if (amt_pixels > 4)
 					return false;
@@ -193,32 +220,24 @@ public class Zone implements Comparable<Zone>
 		return true;
 	}
 
-	public int getDistance_to_destination()
-	{
+	public int getDistance_to_destination() {
 		return distance_to_destination;
 	}
 
-	public void setDistance_to_destination(int distance_to_destination)
-	{
+	public void setDistance_to_destination(int distance_to_destination) {
 		this.distance_to_destination = distance_to_destination;
 	}
 
 	// returns true if this zone contains specified pixel
-	public boolean includes_location(Location location)
-	{
+	public boolean includes_location(Location location) {
 
-		System.out.println(pixels_in_zone.length);
+		System.out.println(pixels_in_zone.size());
 
 		// checks if the pixel location is included in the zones pixels
-		for (int i = 0; i < pixels_in_zone.length; i++)
-			if (pixels_in_zone[i].compareTo(location) == 0)
-				return true;
-
-		return false;
+		return pixels_in_zone.contains(location);
 	}
 
-	public boolean add_zone_going_to(Zone zone)
-	{
+	public boolean add_zone_going_to(Zone zone) {
 		if (neighbors.contains(zone))
 			return false;
 
@@ -227,56 +246,51 @@ public class Zone implements Comparable<Zone>
 		return true;
 	}
 
-	public int getTerrain()
-	{
+	public int getTerrain() {
 		return terrain;
 	}
 
-	public void setTerrain(int terrain)
-	{
+	public void setTerrain(int terrain) {
 		this.terrain = terrain;
 	}
 
-	public Location[] getPixels_in_zone()
-	{
+	public ArrayList<Location> getPixels_in_zone() {
 		return pixels_in_zone;
 	}
 
-	public void setPixels_in_zone(Location[] pixels_in_zone)
-	{
+	public void setPixels_in_zone(ArrayList<Location> pixels_in_zone) {
 		this.pixels_in_zone = pixels_in_zone;
 	}
 
-	public ZoneList getPath_belonging_to()
-	{
+	public ZoneList getPath_belonging_to() {
 		return path_belonging_to;
 	}
 
-	public void setPath_belonging_to(ZoneList path_belonging_to)
-	{
+	public void setPath_belonging_to(ZoneList path_belonging_to) {
 		this.path_belonging_to = path_belonging_to;
 	}
 
-	public ZoneList getZones_going_to()
-	{
+	public ZoneList getZones_going_to() {
 		return neighbors;
 	}
 
-	public void setZones_going_to(ZoneList zones_going_to)
-	{
+	public void setZones_going_to(ZoneList zones_going_to) {
 		this.neighbors = zones_going_to;
 	}
 
-	public Location getLocation()
-	{
-		return pixels_in_zone[0];
+	public Location getLocation() {
+		int length = pixels_in_zone.size();
+
+		if (length == 4)
+			return pixels_in_zone.get(0);
+
+		return pixels_in_zone.get(length - 1);
 	}
 
 	@Override
-	public int compareTo(Zone o)
-	{
-		Location pixel1 = pixels_in_zone[0];
-		Location pixel2 = o.getPixels_in_zone()[0];
+	public int compareTo(Zone o) {
+		Location pixel1 = getLocation();
+		Location pixel2 = o.getLocation();
 
 		int comparator = pixel1.compareTo(pixel2);
 
@@ -286,55 +300,45 @@ public class Zone implements Comparable<Zone>
 		return comparator;
 	}
 
-	public int getCost()
-	{
+	public int getCost() {
 		return cost;
 	}
 
-	public void setCost(int cost)
-	{
+	public void setCost(int cost) {
 		this.cost = cost;
 	}
 
-	public boolean isComputed()
-	{
+	public boolean isComputed() {
 		return computed;
 	}
 
-	public void setComputed(boolean computed)
-	{
+	public void setComputed(boolean computed) {
 		this.computed = computed;
 	}
 
-	public boolean isNeighbours_sorted()
-	{
+	public boolean isNeighbours_sorted() {
 		return neighbours_sorted;
 	}
 
-	public void setNeighbours_sorted(boolean neighbours_sorted)
-	{
+	public void setNeighbours_sorted(boolean neighbours_sorted) {
 		this.neighbours_sorted = neighbours_sorted;
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		String s = getLocation().toString();
 
 		return s;
 	}
 
-	public Zone getZone_arrived_from()
-	{
+	public Zone getZone_arrived_from() {
 		return zone_arrived_from;
 	}
 
-	public void setZone_arrived_from(Zone zone_arrived_from)
-	{
+	public void setZone_arrived_from(Zone zone_arrived_from) {
 		this.zone_arrived_from = zone_arrived_from;
 	}
 
-	public boolean is_out_of_bounds()
-	{
+	public boolean is_out_of_bounds() {
 		int x = getLocation().getX();
 		int y = getLocation().getY();
 
@@ -347,13 +351,11 @@ public class Zone implements Comparable<Zone>
 		return false;
 	}
 
-	public int getTimes_visited()
-	{
+	public int getTimes_visited() {
 		return times_visited;
 	}
 
-	public void setTimes_visited(int times_visited)
-	{
+	public void setTimes_visited(int times_visited) {
 		this.times_visited = times_visited;
 	}
 

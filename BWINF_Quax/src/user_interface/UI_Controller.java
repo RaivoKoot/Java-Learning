@@ -34,8 +34,7 @@ import logic.Pathfinding_Algorithm;
 import logic.Zone;
 import logic.Image_Scanner;
 
-public class UI_Controller implements Displays_Images, Initializable
-{
+public class UI_Controller implements Displays_Images, Initializable {
 
 	@FXML
 	private Button btn_select_file;
@@ -60,24 +59,19 @@ public class UI_Controller implements Displays_Images, Initializable
 	private ArrayList<Zone> path_history;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources)
-	{
+	public void initialize(URL location, ResourceBundle resources) {
 
 		initialize_imageView_size();
 
 	}
 
-	public void btn_file_select_clicked()
-	{
+	public void btn_file_select_clicked() {
 		File image_file = select_a_file_in_explorer();
-		if (image_file != null)
-		{
+		if (image_file != null) {
 			setMap(image_file);
-			try
-			{
+			try {
 				Data.setMap(ImageIO.read(image_file));
-			} catch (IOException e)
-			{
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -87,8 +81,7 @@ public class UI_Controller implements Displays_Images, Initializable
 	}
 
 	@Override
-	public void display_bufferedImage(BufferedImage buffered_image)
-	{
+	public void display_bufferedImage(BufferedImage buffered_image) {
 
 		Image image = SwingFXUtils.toFXImage(buffered_image, null);
 
@@ -97,8 +90,7 @@ public class UI_Controller implements Displays_Images, Initializable
 	}
 
 	@Override
-	public void display_image_file(File image_file)
-	{
+	public void display_image_file(File image_file) {
 
 		Image image = new Image(image_file.toURI().toString());
 
@@ -107,16 +99,14 @@ public class UI_Controller implements Displays_Images, Initializable
 	}
 
 	@Override
-	public void display_image(Image image)
-	{
+	public void display_image(Image image) {
 
 		map_container.setImage(image);
 
 	}
 
 	@Override
-	public File select_a_file_in_explorer()
-	{
+	public File select_a_file_in_explorer() {
 		FileChooser file_chooser = new FileChooser();
 		file_chooser.setTitle("chose the map file");
 		file_chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", "*.*"));
@@ -126,19 +116,16 @@ public class UI_Controller implements Displays_Images, Initializable
 		return file_chooser.showOpenDialog(file_chooser_window);
 	}
 
-	public File getMap()
-	{
+	public File getMap() {
 		return map;
 	}
 
-	public void setMap(File map)
-	{
+	public void setMap(File map) {
 		this.map = map;
 	}
 
 	// makes the image as large as possible depending on size of monitor
-	public void initialize_imageView_size()
-	{
+	public void initialize_imageView_size() {
 		// gets the size of the screen in pixels
 		Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -147,15 +134,15 @@ public class UI_Controller implements Displays_Images, Initializable
 
 		// makes the imageView about as large as the host monitor
 		map_container.setFitWidth(screen_width);
-		map_container.setFitHeight(screen_height - 150); // leave space for top pane
+		map_container.setFitHeight(screen_height - 150); // leave space for top
+															// pane
 	}
 
 	/*
-	 * scans for the vertices of the starts and displays them in text field Enlarges
-	 * these in the image for visualization purposes
+	 * scans for the vertices of the starts and displays them in text field
+	 * Enlarges these in the image for visualization purposes
 	 */
-	public void scan_starts_clicked()
-	{
+	public void scan_starts_clicked() {
 		Image_Scanner.find_starts_and_destination();
 
 		String starts = Image_Scanner.starts_toString();
@@ -166,8 +153,7 @@ public class UI_Controller implements Displays_Images, Initializable
 		display_bufferedImage(Image_Scanner.visualize_locations());
 	}
 
-	public void run_algorithm()
-	{
+	public void run_algorithm() {
 		int chosen_x = Integer.parseInt(tfield_x.getText());
 		int chosen_y = Integer.parseInt(tfield_y.getText());
 		Location start_loc = new Location(chosen_x, chosen_y);
@@ -179,51 +165,45 @@ public class UI_Controller implements Displays_Images, Initializable
 
 		Zone start = new Zone(start_loc, dest);
 
-		ArrayList<Zone> path = Pathfinding_Algorithm.find_path(start, dest, Data.getMap());
-
-		Data.setPath(path);
+		try {
+			ArrayList<Zone> path = Pathfinding_Algorithm.find_path(start, dest, Data.getMap());
+			Data.setPath(path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*
 	 * multithreaded approach to showing the progress of the algorithm in the
 	 * displayed picture
 	 */
-	public void visualize_results()
-	{
-		Service<Void> service = new Service<Void>()
-		{
+	public void visualize_results() {
+		Service<Void> service = new Service<Void>() {
 			@Override
-			protected Task<Void> createTask()
-			{
-				return new Task<Void>()
-				{
+			protected Task<Void> createTask() {
+				return new Task<Void>() {
 					// final CountDownLatch latch = new CountDownLatch(1);
 
 					@Override
-					protected Void call() throws Exception
-					{
+					protected Void call() throws Exception {
 
 						ArrayList<Zone> path = Data.getPath();
 						BufferedImage buffered_map = Data.getMap();
 
 						// background work
-						for (Zone zone : path)
-						{
-							// logic.edit_pixel(x, 300, Color.CYAN.getRGB(), buffered_map);
+						for (Zone zone : path) {
+							// logic.edit_pixel(x, 300, Color.CYAN.getRGB(),
+							// buffered_map);
 							Location location = zone.getLocation();
 							buffered_map.setRGB(location.getX(), location.getY(), -16711936);
 
 							// FX work
-							Platform.runLater(new Runnable()
-							{
+							Platform.runLater(new Runnable() {
 								@Override
-								public void run()
-								{
-									try
-									{
+								public void run() {
+									try {
 										display_bufferedImage(buffered_map);
-									} finally
-									{
+									} finally {
 										// latch.countDown();
 									}
 								}
@@ -243,13 +223,11 @@ public class UI_Controller implements Displays_Images, Initializable
 		service.start();
 	}
 
-	public ArrayList<Zone> getPath_history()
-	{
+	public ArrayList<Zone> getPath_history() {
 		return path_history;
 	}
 
-	public void setPath_history(ArrayList<Zone> path_history)
-	{
+	public void setPath_history(ArrayList<Zone> path_history) {
 		this.path_history = path_history;
 	}
 

@@ -1,39 +1,32 @@
 package logic;
 
-public class Location implements Comparable<Location>
-{
+public class Location implements Comparable<Location> {
 
 	private int x;
 	private int y;
 
-	public Location(int x, int y)
-	{
+	public Location(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public int getX()
-	{
+	public int getX() {
 		return x;
 	}
 
-	public void setX(int x)
-	{
+	public void setX(int x) {
 		this.x = x;
 	}
 
-	public int getY()
-	{
+	public int getY() {
 		return y;
 	}
 
-	public void setY(int y)
-	{
+	public void setY(int y) {
 		this.y = y;
 	}
 
-	public Location move_one_toward(Location direction)
-	{
+	public Location move_one_toward(Location direction) {
 		int change_x = (direction.getX() - x);
 		int change_y = (direction.getY() - y);
 
@@ -47,8 +40,7 @@ public class Location implements Comparable<Location>
 
 	}
 
-	private int increment_number(int initial, int change)
-	{
+	private int increment_number(int initial, int change) {
 		if (change > 0)
 			initial++;
 		else if (change < 0)
@@ -58,8 +50,7 @@ public class Location implements Comparable<Location>
 	}
 
 	@Override
-	public int compareTo(Location arg0)
-	{
+	public int compareTo(Location arg0) {
 
 		if (x == arg0.getX() && y == arg0.getY())
 			return 0;
@@ -67,14 +58,12 @@ public class Location implements Comparable<Location>
 		return -1;
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		String s = "(" + x + "|" + y + ")";
 		return s;
 	}
 
-	public int get_distance_to(Location destination)
-	{
+	public int get_distance_to(Location destination) {
 		int delta_x = Math.abs(x - destination.getX());
 		int delta_y = Math.abs(y - destination.getY());
 
@@ -83,8 +72,7 @@ public class Location implements Comparable<Location>
 		return manhatten_distance;
 	}
 
-	public int get_largest_1d_distance_to(Location destination)
-	{
+	public int get_largest_1d_distance_to(Location destination) {
 		int delta_x = Math.abs(x - destination.getX());
 		int delta_y = Math.abs(y - destination.getY());
 
@@ -94,4 +82,17 @@ public class Location implements Comparable<Location>
 		return delta_y;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+
+		Location loc = (Location) obj;
+
+		if (compareTo(loc) == 0)
+			return true;
+
+		return false;
+
+	}
 }
