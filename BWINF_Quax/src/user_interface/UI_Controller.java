@@ -8,13 +8,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
 import javax.imageio.ImageIO;
-
 import data.Data;
-
 import java.awt.Color;
-
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
