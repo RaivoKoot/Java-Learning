@@ -9,8 +9,10 @@ import javafx.collections.ObservableList;
 
 public class DatabaseConnection implements CanInsertDataIntoDB, CanPullStatsFromDB {
 
-	private String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-	private String url = "jdbc:sqlserver://raivo-koots-server.database.windows.net:1433;database=ChessDatabase;user=ClientLogin@raivo-koots-server;password=<Password1>;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+	private String driver = "\"com.mysql.jdbc.Driver\"";
+	private String url = "jdbc:mysql://localhost:3306/";
+	private String user = "root";
+	private String password = "";
 
 	private Connection connection;
 	private Statement statement;
@@ -21,7 +23,7 @@ public class DatabaseConnection implements CanInsertDataIntoDB, CanPullStatsFrom
 	private void createConnection() {
 		try {
 			Class.forName(driver);
-			connection = DriverManager.getConnection(url);
+			connection = DriverManager.getConnection(url,user,password);
 			statement = connection.createStatement();
 		} catch (Exception e) {
 			e.printStackTrace();
