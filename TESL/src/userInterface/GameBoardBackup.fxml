@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.GameBoardController">
+   <children>
+      <ImageView fitHeight="800.0" fitWidth="1400.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../../images%20esl/a-worn-parchment-paper-background-texture.jpg" />
+         </image>
+      </ImageView>
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1400.0">
+         <center>
+            <AnchorPane minWidth="1250.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox minHeight="500.0" minWidth="625.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black;">
+                     <children>
+                        <HBox fx:id="leftLaneTop" maxHeight="250.0" minHeight="250.0" prefHeight="100.0" prefWidth="200.0" />
+                        <HBox fx:id="leftLaneBottom" minHeight="250.0" prefHeight="250.0" prefWidth="200.0" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="100.0" minHeight="500.0" minWidth="625.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black;" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <HBox fx:id="rightLaneTop" maxHeight="250.0" minHeight="250.0" prefHeight="100.0" prefWidth="200.0" />
+                        <HBox fx:id="rightLaneBottom" minHeight="250.0" prefHeight="250.0" prefWidth="200.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </center>
+         <top>
+            <HBox alignment="CENTER" spacing="30.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox fx:id="topZone" prefHeight="150.0" prefWidth="1200.0" spacing="20.0">
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding></HBox>
+                  <Label fx:id="magickaTop" text="0/0">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </top>
+         <bottom>
+            <HBox alignment="CENTER" spacing="30.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox fx:id="lowerZone" prefHeight="150.0" prefWidth="1200.0" spacing="20.0" />
+                  <Label fx:id="magickaBottom" text="0/0">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </bottom>
+         <right>
+            <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#startGameButtonClicked" text="Start Game" />
+                  <Button fx:id="endTurnButton" mnemonicParsing="false" onAction="#endTurnButtonClicked" text="End Turn" />
+               </children>
+            </VBox>
+         </right>
+         <left>
+            <HBox prefHeight="100.0" prefWidth="75.5" BorderPane.alignment="CENTER" />
+         </left>
+      </BorderPane>
+   </children>
+</StackPane>
