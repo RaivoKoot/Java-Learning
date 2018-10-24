@@ -1,2 +1,2 @@
 # Raivos-Repository
-My First repository. For My Chess Engine
+My Second repository. For My Chess Engine and BWINF Competition projects.
